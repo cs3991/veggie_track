@@ -5,8 +5,10 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:veggie_track/theme/brightness_cubit.dart';
-import 'package:veggie_track/theme/ui/theme_chooser.dart';
+import 'package:veggie_track/theme/cubit/brightness_cubit.dart';
+import 'package:veggie_track/theme/custom_colors.dart';
+
+import 'calendar/ui/calendar_page.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -17,7 +19,7 @@ Future<void> main() async {
         : await getTemporaryDirectory(),
   );
   // navbar and statusbar color setup:
-  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+  SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
       systemStatusBarContrastEnforced: false,
       systemNavigationBarColor: Colors.transparent,
       systemNavigationBarDividerColor: Colors.transparent));
@@ -37,75 +39,39 @@ class App extends StatelessWidget {
       ],
       child: BlocBuilder<BrightnessCubit, Brightness>(
         builder: (context, brightness) {
+          final defaultTheme = ThemeData(
+            useMaterial3: true,
+            colorScheme: ColorScheme.fromSeed(
+              seedColor: const Color(0xFF006c51),
+            ),
+            extensions: [
+              CustomColors(
+                veganColor: const Color(0xff5fd3b0),
+                veggieColor: const Color(0xff6bc544),
+                meatColor: const Color(0xffbc9834),
+              )
+            ],
+          );
           return DynamicColorBuilder(
-              builder: (lightColorScheme, darkColorScheme) => MaterialApp(
+              builder: (lightDynamicColorScheme, darkDynamicColorScheme) =>
+                  MaterialApp(
                     title: 'Veggie Track',
                     debugShowCheckedModeBanner: false,
-                    theme: ThemeData(
-                      useMaterial3: true,
-                      colorScheme: lightColorScheme,
+                    theme: defaultTheme.copyWith(
+                      colorScheme: lightDynamicColorScheme,
+                      // brightness: Brightness.light,
                     ),
-                    darkTheme: ThemeData(
-                      useMaterial3: true,
-                      colorScheme: darkColorScheme,
+                    darkTheme: defaultTheme.copyWith(
+                      colorScheme: darkDynamicColorScheme,
+                      brightness: Brightness.dark,
                     ),
                     themeMode: brightness == Brightness.dark
                         ? ThemeMode.dark
                         : ThemeMode.light,
-                    home: const MyHomePage(),
+                    home: CalendarPage(),
                   ));
         },
       ),
-    );
-  }
-}
-
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key});
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.background,
-
-      appBar: AppBar(
-        title: Text('Veggie Track'),
-        actions: [
-          ThemeSwitcherIcon(),
-        ],
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headline4,
-            ),
-          ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), //
     );
   }
 }

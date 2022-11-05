@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../brightness_cubit.dart';
+import '../cubit/brightness_cubit.dart';
 
 class ThemeSwitcherIcon extends StatelessWidget {
   const ThemeSwitcherIcon({super.key});
