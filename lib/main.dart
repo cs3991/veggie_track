@@ -44,13 +44,6 @@ class App extends StatelessWidget {
             colorScheme: ColorScheme.fromSeed(
               seedColor: const Color(0xFF006c51),
             ),
-            extensions: [
-              CustomColors(
-                veganColor: const Color(0xff5fd3b0),
-                veggieColor: const Color(0xff6bc544),
-                meatColor: const Color(0xffbc9834),
-              )
-            ],
           );
           return DynamicColorBuilder(
               builder: (lightDynamicColorScheme, darkDynamicColorScheme) =>
@@ -60,10 +53,12 @@ class App extends StatelessWidget {
                     theme: defaultTheme.copyWith(
                       colorScheme: lightDynamicColorScheme,
                       // brightness: Brightness.light,
+                      extensions: [lightCustomColors],
                     ),
                     darkTheme: defaultTheme.copyWith(
                       colorScheme: darkDynamicColorScheme,
                       brightness: Brightness.dark,
+                      extensions: [darkCustomColors],
                     ),
                     themeMode: brightness == Brightness.dark
                         ? ThemeMode.dark

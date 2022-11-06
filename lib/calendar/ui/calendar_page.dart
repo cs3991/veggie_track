@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:veggie_track/theme/custom_colors.dart';
 import 'package:veggie_track/theme/ui/theme_chooser.dart';
+
+import 'calendar_body.dart';
 
 class CalendarPage extends StatelessWidget {
   @override
@@ -13,22 +14,7 @@ class CalendarPage extends StatelessWidget {
           ThemeSwitcherIcon(),
         ],
       ),
-      body: Column(
-        children: [
-          ColoredBox(
-            color: Theme.of(context).extension<CustomColors>()!.meatColor,
-            child: const Text('Meat'),
-          ),
-          ColoredBox(
-            color: Theme.of(context).extension<CustomColors>()!.veggieColor,
-            child: const Text('Veggie'),
-          ),
-          ColoredBox(
-            color: Theme.of(context).extension<CustomColors>()!.veganColor,
-            child: const Text('Vegan'),
-          ),
-        ],
-      ),
+      body: CalendarBody(),
     );
   }
 }
