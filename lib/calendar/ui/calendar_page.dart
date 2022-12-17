@@ -4,6 +4,8 @@ import 'package:veggie_track/theme/ui/theme_chooser.dart';
 import 'calendar_body.dart';
 
 class CalendarPage extends StatelessWidget {
+  const CalendarPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -14,7 +16,7 @@ class CalendarPage extends StatelessWidget {
           ThemeSwitcherIcon(),
         ],
       ),
-      body: CalendarBody(),
+      body: const CalendarBody(),
     );
   }
 }

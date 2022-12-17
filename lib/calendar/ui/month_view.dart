@@ -10,7 +10,7 @@ class MonthView extends StatelessWidget {
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
-        DayOfWeekRow(),
+        const DayOfWeekRow(),
         SizedBox(
           height: 350,
           child: Column(
@@ -23,8 +23,8 @@ class MonthView extends StatelessWidget {
                   7,
                   (dayOfWeekIndex) => Column(
                     children: [
-                      Padding(
-                        padding: const EdgeInsets.all(3),
+                      const Padding(
+                        padding: EdgeInsets.all(3),
                         child: DayTile(),
                       ),
                       Text(

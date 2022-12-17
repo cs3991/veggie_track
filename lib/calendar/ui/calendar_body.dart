@@ -31,6 +31,7 @@ class CalendarBody extends StatelessWidget {
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     backgroundColor: colors.primaryContainer,
+                    elevation: 0,
                   ),
                   onPressed: () {},
                   child: Text(
@@ -51,8 +52,8 @@ class CalendarBody extends StatelessWidget {
               ],
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.all(16),
+          const Padding(
+            padding: EdgeInsets.all(16),
             child: SizedBox(height: 400, child: MonthView()),
           ),
 

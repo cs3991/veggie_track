@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:veggie_track/theme/custom_colors.dart';
 
@@ -6,6 +8,12 @@ class DayTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var color1 = Theme.of(context).extension<CustomColors>()!.getEmissionColor(
+          Random().nextDouble() * 600 + 200,
+        );
+    var color2 = Theme.of(context).extension<CustomColors>()!.getEmissionColor(
+          Random().nextDouble() * 1000,
+        );
     return Stack(children: [
       SizedBox(
         height: 41,
@@ -17,8 +25,8 @@ class DayTile extends StatelessWidget {
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
               colors: [
-                Theme.of(context).extension<CustomColors>()!.veggieContainer,
-                Theme.of(context).extension<CustomColors>()!.meatContainer,
+                color1,
+                color2,
                 // top Right part
               ],
             ),

@@ -63,9 +63,35 @@ class App extends StatelessWidget {
                     themeMode: brightness == Brightness.dark
                         ? ThemeMode.dark
                         : ThemeMode.light,
-                    home: CalendarPage(),
+                    home: const CalendarPage(),
+                    // home: EmissionColorWidget(),
                   ));
         },
+      ),
+    );
+  }
+}
+
+class EmissionColorWidget extends StatelessWidget {
+  const EmissionColorWidget({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    // Generate a list of 10 linearly spaced values of CO2 emissions
+    List<double> emissions = List.generate(10, (i) => i * 100);
+
+    return Scaffold(
+      body: Row(
+        children: [
+          for (double emission in emissions)
+            Container(
+              width: 50,
+              height: 50,
+              color: Theme.of(context)
+                  .extension<CustomColors>()!
+                  .getEmissionColor(emission),
+            ),
+        ],
       ),
     );
   }
