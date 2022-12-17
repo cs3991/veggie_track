@@ -56,37 +56,6 @@ class CalendarBody extends StatelessWidget {
             padding: EdgeInsets.all(16),
             child: SizedBox(height: 400, child: MonthView()),
           ),
-
-          // DayTile(),
-          // ColoredBox(
-          //     color: Theme.of(context).extension<CustomColors>()!.meatContainer,
-          //     child: Text(
-          //       'Meat',
-          //       style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-          //           color: Theme.of(context)
-          //               .extension<CustomColors>()!
-          //               .onMeatContainer),
-          //     )),
-          // ColoredBox(
-          //     color:
-          //         Theme.of(context).extension<CustomColors>()!.veggieContainer,
-          //     child: Text(
-          //       'Veggie',
-          //       style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-          //           color: Theme.of(context)
-          //               .extension<CustomColors>()!
-          //               .onVeggieContainer),
-          //     )),
-          // ColoredBox(
-          //     color:
-          //         Theme.of(context).extension<CustomColors>()!.veganContainer,
-          //     child: Text(
-          //       'Vegan',
-          //       style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-          //           color: Theme.of(context)
-          //               .extension<CustomColors>()!
-          //               .onVeganContainer),
-          //     )),
         ],
       ),
     );
