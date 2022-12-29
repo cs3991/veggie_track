@@ -1,0 +1,26 @@
+name: isar_veggie_track
+description: Local storage for veggie track app based on Isar noSQL database
+publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+version: 0.0.1
+
+environment:
+  sdk: '>=2.18.4 <3.0.0'
+  flutter: ">=1.17.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  isar: ^3.0.5
+  isar_flutter_libs: ^3.0.5
+  veggie_track_api:
+    path: ../veggie_track_api
+
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^2.0.1
+  isar_generator: ^3.0.5
+  build_runner: ^2.3.3
+
+flutter:

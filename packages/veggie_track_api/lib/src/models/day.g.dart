@@ -7,17 +7,18 @@ part of 'day.dart';
 // **************************************************************************
 
 Day _$DayFromJson(Map<String, dynamic> json) => Day(
-      json['date'] as String,
-      (json['lunch'] as List<dynamic>?)
-          ?.map((e) => Food.fromJson(e as Map<String, dynamic>))
+      DateTime.parse(json['date'] as String),
+      (json['lunch'] as List<dynamic>)
+          .map((e) => Food.fromJson(e as Map<String, dynamic>))
           .toList(),
-      (json['diner'] as List<dynamic>?)
-          ?.map((e) => Food.fromJson(e as Map<String, dynamic>))
+      (json['diner'] as List<dynamic>)
+          .map((e) => Food.fromJson(e as Map<String, dynamic>))
           .toList(),
     );
 
-Map<String, dynamic> _$DayToJson(Day instance) => <String, dynamic>{
-      'date': instance.date,
+Map<String, dynamic> _$DayToJson(Day instance) =>
+    <String, dynamic>{
+      'date': instance.date.toIso8601String(),
       'lunch': instance.lunch,
       'diner': instance.diner,
     };

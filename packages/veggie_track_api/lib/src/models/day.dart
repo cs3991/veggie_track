@@ -8,9 +8,9 @@ part 'day.g.dart';
 class Day {
   Day(this.date, this.lunch, this.diner);
 
-  String date;
-  List<Food>? lunch;
-  List<Food>? diner;
+  DateTime date;
+  List<Food> lunch;
+  List<Food> diner;
 
   factory Day.fromJson(Map<String, dynamic> json) => _$DayFromJson(json);
 

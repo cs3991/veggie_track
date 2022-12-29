@@ -1,4 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'food_type.dart';
 
 part 'food.g.dart';
 
@@ -6,7 +7,7 @@ part 'food.g.dart';
 class Food {
   Food(this.foodType, this.quantity);
 
-  String foodType;
+  FoodType foodType;
   int quantity;
 
   factory Food.fromJson(Map<String, dynamic> json) => _$FoodFromJson(json);

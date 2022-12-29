@@ -19,7 +19,13 @@ void main() {
                 ]
               }),
               isA<Day>()
-                  .having((d) => d.date, "date", "2021-04-24T20:00:00.000Z")
+                  .having(
+                      (d) => d.date,
+                      "date",
+                      isA<DateTime>()
+                          .having((p0) => p0.year, "year", 2021)
+                          .having((p0) => p0.month, "month", 4)
+                          .having((p0) => p0.day, "day", 24))
                   .having((d) => d.lunch, "lunch", [
                 isA<Food>()
                     .having((f) => f.foodType, "foodType", "vegetables")
@@ -42,7 +48,13 @@ void main() {
                 "date": "2021-04-24T20:00:00.000Z",
               }),
               isA<Day>()
-                  .having((d) => d.date, "date", "2021-04-24T20:00:00.000Z")
+                  .having(
+                      (d) => d.date,
+                      "date",
+                      isA<DateTime>()
+                          .having((p0) => p0.year, "year", 2021)
+                          .having((p0) => p0.month, "month", 4)
+                          .having((p0) => p0.day, "day", 24))
                   .having((d) => d.lunch, "lunch", null)
                   .having((d) => d.diner, "diner", null)));
     });
@@ -60,5 +72,17 @@ void main() {
                   ]
                 }),
             throwsA(isA<Error>())));
+  });
+  group("Food type", () {
+    test("Returns correct FoodType", () {
+      expect(
+        () => FoodType.fromJson(
+          {'label': 'vegetables', 'carbon_footprint': 0.2},
+        ),
+        isA<FoodType>()
+            .having((f) => f.label, 'label', 'vegetables')
+            .having((f) => f.carbonFootprint, 'carbonFootprint', 0.2),
+      );
+    });
   });
 }
