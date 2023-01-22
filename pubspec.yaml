@@ -20,7 +20,7 @@ dependencies:
   isar_veggie_track:
     path: packages/isar_veggie_track
   veggie_track_api:
-    path: packages/veggie_track_api
+    path: packages/veggie_track_repository
 
 dev_dependencies:
   flutter_test:

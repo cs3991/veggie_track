@@ -1,4 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
+
 import 'food_type.dart';
 
 part 'food.g.dart';

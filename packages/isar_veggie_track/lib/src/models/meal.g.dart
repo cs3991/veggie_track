@@ -86,7 +86,7 @@ Meal _mealDeserialize(
   object.id = id;
   object.mealType =
       _MealmealTypeValueEnumMap[reader.readByteOrNull(offsets[1])] ??
-          MealType.breakfast;
+          MealType.lunch;
   object.quantity = reader.readLong(offsets[2]);
   return object;
 }
@@ -102,7 +102,7 @@ P _mealDeserializeProp<P>(
       return (reader.readDateTime(offset)) as P;
     case 1:
       return (_MealmealTypeValueEnumMap[reader.readByteOrNull(offset)] ??
-          MealType.breakfast) as P;
+          MealType.lunch) as P;
     case 2:
       return (reader.readLong(offset)) as P;
     default:
@@ -111,16 +111,12 @@ P _mealDeserializeProp<P>(
 }
 
 const _MealmealTypeEnumValueMap = {
-  'breakfast': 0,
-  'lunch': 1,
-  'diner': 2,
-  'snack': 3,
+  'lunch': 0,
+  'diner': 1,
 };
 const _MealmealTypeValueEnumMap = {
-  0: MealType.breakfast,
-  1: MealType.lunch,
-  2: MealType.diner,
-  3: MealType.snack,
+  0: MealType.lunch,
+  1: MealType.diner,
 };
 
 Id _mealGetId(Meal object) {

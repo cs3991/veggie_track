@@ -12,8 +12,6 @@ dependencies:
     sdk: flutter
   isar: ^3.0.5
   isar_flutter_libs: ^3.0.5
-  veggie_track_api:
-    path: ../veggie_track_api
 
 
 dev_dependencies:

@@ -5,10 +5,8 @@ import 'food_type.dart';
 part 'meal.g.dart';
 
 enum MealType {
-  breakfast,
   lunch,
   diner,
-  snack,
 }
 
 @collection
