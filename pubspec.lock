@@ -355,7 +355,7 @@ packages:
   veggie_track_api:
     dependency: "direct main"
     description:
-      path: "packages/veggie_track_api"
+      path: "packages/veggie_track_repository"
       relative: true
     source: path
     version: "0.0.1"

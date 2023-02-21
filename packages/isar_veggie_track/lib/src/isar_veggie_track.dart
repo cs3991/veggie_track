@@ -32,11 +32,8 @@ class IsarVeggieTrack {
     return result;
   }
 
-  Future<FoodType> readFoodTypeByLabel(String label) async {
+  Future<FoodType?> readFoodTypeByLabel(String label) async {
     var result = await isar.foodTypes.filter().labelEqualTo(label).findFirst();
-    if (result == null) {
-      throw IsarException("The FoodType with label $label does not exist");
-    }
     return result;
   }
 

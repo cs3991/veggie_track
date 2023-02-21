@@ -1,4 +1,4 @@
-name: veggie_track_api
+name: veggie_track_repository
 description: A new Flutter package project.
 version: 0.0.1
 
@@ -16,6 +16,8 @@ dev_dependencies:
   build_runner: ^2.3.3
   json_serializable: ^6.5.4
   flutter_lints: ^2.0.1
+  isar_veggie_track:
+    path: ../isar_veggie_track
 
 flutter:
 

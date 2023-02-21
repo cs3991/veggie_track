@@ -7,8 +7,8 @@ part of 'food.dart';
 // **************************************************************************
 
 Food _$FoodFromJson(Map<String, dynamic> json) => Food(
-      FoodType.fromJson(json['food_type'] as Map<String, dynamic>),
-      json['quantity'] as int,
+      foodType: FoodType.fromJson(json['food_type'] as Map<String, dynamic>),
+      quantity: json['quantity'] as int,
     );
 
 Map<String, dynamic> _$FoodToJson(Food instance) => <String, dynamic>{

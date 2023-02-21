@@ -6,7 +6,7 @@ part 'food.g.dart';
 
 @JsonSerializable(fieldRename: FieldRename.snake)
 class Food {
-  Food(this.foodType, this.quantity);
+  Food({required this.foodType, required this.quantity});
 
   FoodType foodType;
   int quantity;

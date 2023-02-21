@@ -6,7 +6,7 @@ part 'day.g.dart';
 
 @JsonSerializable(fieldRename: FieldRename.snake)
 class Day {
-  Day(this.date, this.lunch, this.diner);
+  Day({required this.date, required this.lunch, required this.diner});
 
   DateTime date;
   List<Food> lunch;
