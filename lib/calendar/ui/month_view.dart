@@ -23,9 +23,11 @@ class MonthView extends StatelessWidget {
                   7,
                   (dayOfWeekIndex) => Column(
                     children: [
-                      const Padding(
+                      Padding(
                         padding: EdgeInsets.all(3),
-                        child: DayTile(),
+                        child: DayTile(
+                          day: weekIndex * 7 + dayOfWeekIndex + 1,
+                        ),
                       ),
                       Text(
                         '${weekIndex * 7 + dayOfWeekIndex + 1}',

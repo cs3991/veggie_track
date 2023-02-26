@@ -6,7 +6,7 @@ class VeggieTrackRepository {
   final isarVeggieTrack = isar.IsarVeggieTrack();
 
   VeggieTrackRepository() {
-    populateFoodTypes();
+    // populateFoodTypes();
   }
 
   Future<void> addFoodType(models.FoodType repoFoodType) async {

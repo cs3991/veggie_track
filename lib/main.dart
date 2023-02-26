@@ -4,10 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
-import 'package:isar_veggie_track/isar_veggie_track.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:veggie_track/theme/cubit/brightness_cubit.dart';
 import 'package:veggie_track/theme/custom_colors.dart';
+
+import 'calendar/ui/calendar_page.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -62,53 +63,9 @@ class App extends StatelessWidget {
                     themeMode: brightness == Brightness.dark
                         ? ThemeMode.dark
                         : ThemeMode.light,
-                    // home: const CalendarPage(),
-                    home: TestWidget(),
+                    home: const CalendarPage(),
                   ));
         },
-      ),
-    );
-  }
-}
-
-class TestWidget extends StatefulWidget {
-  TestWidget({super.key});
-
-  @override
-  State<TestWidget> createState() => _TestWidgetState();
-}
-
-class _TestWidgetState extends State<TestWidget> {
-  late final veggieRepo = IsarVeggieTrack();
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            FutureBuilder(
-              future: veggieRepo.readAllFoodTypes(),
-              builder: (context, futureFoodTypes) {
-                if (futureFoodTypes.hasData) {
-                  return DropdownButton(
-                    items: [
-                      for (final foodType in futureFoodTypes.data!)
-                        DropdownMenuItem(
-                          value: foodType,
-                          child: Text(foodType.label),
-                        )
-                    ],
-                    onChanged: (Object? value) {},
-                  );
-                } else {
-                  return const CircularProgressIndicator();
-                }
-              },
-            ),
-          ],
-        ),
       ),
     );
   }

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:veggie_track/theme/ui/theme_chooser.dart';
 
+import '../bloc/month_days_bloc/month_days_bloc.dart';
 import 'calendar_body.dart';
 
 class CalendarPage extends StatelessWidget {
@@ -16,7 +18,10 @@ class CalendarPage extends StatelessWidget {
           ThemeSwitcherIcon(),
         ],
       ),
-      body: const CalendarBody(),
+      body: BlocProvider(
+        create: (context) => MonthDaysBloc(month: DateTime.now()),
+        child: const CalendarBody(),
+      ),
     );
   }
 }

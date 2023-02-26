@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 import 'package:veggie_track/calendar/ui/month_view.dart';
+
+import '../bloc/month_days_bloc/month_days_bloc.dart';
 
 class CalendarBody extends StatelessWidget {
   const CalendarBody({
@@ -26,7 +30,13 @@ class CalendarBody extends StatelessWidget {
                     foregroundColor: colors.onPrimaryContainer,
                   ),
                   icon: const Icon(Icons.arrow_back_ios_rounded),
-                  onPressed: () {},
+                  onPressed: () {
+                    var bloc = context.read<MonthDaysBloc>();
+                    bloc.updateMonth(
+                      DateTime(
+                          bloc.state.month.year, bloc.state.month.month - 1),
+                    );
+                  },
                 ),
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
@@ -34,11 +44,20 @@ class CalendarBody extends StatelessWidget {
                     elevation: 0,
                   ),
                   onPressed: () {},
-                  child: Text(
-                    'Novembre 2022',
-                    style: Theme.of(context).textTheme.labelLarge!.copyWith(
-                          color: colors.onPrimaryContainer,
-                        ),
+                  child: BlocBuilder<MonthDaysBloc, MonthDaysState>(
+                    builder: (context, state) {
+                      if (state is MonthDaysInitial) {
+                        context
+                            .read<MonthDaysBloc>()
+                            .updateMonth(DateTime.now());
+                      }
+                      return Text(
+                        DateFormat.yMMMM().format(state.month),
+                        style: Theme.of(context).textTheme.labelLarge!.copyWith(
+                              color: colors.onPrimaryContainer,
+                            ),
+                      );
+                    },
                   ),
                 ),
                 IconButton(
@@ -47,7 +66,13 @@ class CalendarBody extends StatelessWidget {
                     foregroundColor: colors.onPrimaryContainer,
                   ),
                   icon: const Icon(Icons.arrow_forward_ios_rounded),
-                  onPressed: () {},
+                  onPressed: () {
+                    var bloc = context.read<MonthDaysBloc>();
+                    bloc.updateMonth(
+                      DateTime(
+                          bloc.state.month.year, bloc.state.month.month + 1),
+                    );
+                  },
                 ),
               ],
             ),
