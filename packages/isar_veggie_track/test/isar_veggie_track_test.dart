@@ -16,7 +16,7 @@ void main() async {
           ..label = 'Apple'
           ..carbonFootprint = 0.5);
         var apple = await isar.readFoodTypeByLabel('Apple');
-        expect(apple!.carbonFootprint, 0.5);
+        expect(apple.carbonFootprint, 0.5);
         var apple2 = await isar.readFoodType(apple.id);
         expect(apple2.carbonFootprint, 0.5);
         expect(apple2.label, 'Apple');

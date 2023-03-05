@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:isar_veggie_track/isar_veggie_track.dart' as isar;
 import 'package:veggie_track_repository/src/models/models.dart' as models;
 
@@ -10,16 +9,9 @@ class VeggieTrackRepository {
   }
 
   Future<void> addFoodType(models.FoodType repoFoodType) async {
-    if ((await isarVeggieTrack.readFoodTypeByLabel(repoFoodType.label)) ==
-        null) {
-      await isarVeggieTrack.createFoodType(isar.FoodType()
-        ..label = repoFoodType.label
-        ..carbonFootprint = repoFoodType.carbonFootprint);
-    } else {
-      if (kDebugMode) {
-        print("The FoodType with label ${repoFoodType.label} already exists");
-      }
-    }
+    await isarVeggieTrack.createFoodType(isar.FoodType()
+      ..label = repoFoodType.label
+      ..carbonFootprint = repoFoodType.carbonFootprint);
   }
 
   Future<void> populateFoodTypes() async {
@@ -48,20 +40,22 @@ class VeggieTrackRepository {
   Future<List<isar.Meal>> _toIsarMeals(models.Day day) async {
     List<isar.Meal> meals = [];
     for (var food in day.lunch) {
-      meals.add(isar.Meal()
+      var new_meal = isar.Meal()
         ..date = day.date
         ..mealType = isar.MealType.lunch
         ..foodType.value =
             await isarVeggieTrack.readFoodTypeByLabel(food.foodType.label)
-        ..quantity = food.quantity);
+        ..quantity = food.quantity;
+      meals.add(new_meal);
     }
     for (var food in day.diner) {
-      meals.add(isar.Meal()
+      var new_meal = isar.Meal()
         ..date = day.date
         ..mealType = isar.MealType.diner
         ..foodType.value =
             await isarVeggieTrack.readFoodTypeByLabel(food.foodType.label)
-        ..quantity = food.quantity);
+        ..quantity = food.quantity;
+      meals.add(new_meal);
     }
     return meals;
   }
@@ -105,5 +99,11 @@ class VeggieTrackRepository {
           quantity: meal.quantity));
     }
     return models.Day(date: date, lunch: lunch, diner: diner);
+  }
+
+  Future<models.FoodType> getFoodTypeByLabel(String s) async {
+    var foodType = await isarVeggieTrack.readFoodTypeByLabel(s);
+    return models.FoodType(
+        label: foodType.label, carbonFootprint: foodType.carbonFootprint);
   }
 }

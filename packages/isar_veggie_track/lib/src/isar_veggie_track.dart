@@ -18,7 +18,22 @@ class IsarException implements Exception {
 class IsarVeggieTrack {
   final isar = Isar.openSync([MealSchema, FoodTypeSchema]);
 
+  Future<void> deleteDatabase() async {
+    await isar.writeTxn(() async {
+      await isar.foodTypes.where().deleteAll();
+      await isar.meals.where().deleteAll();
+    });
+  }
+
   Future<void> createFoodType(FoodType foodType) async {
+    if ((await isar.foodTypes
+            .filter()
+            .labelEqualTo(foodType.label)
+            .findFirst()) !=
+        null) {
+      throw IsarException(
+          "FoodType with label ${foodType.label} already exists");
+    }
     await isar.writeTxn(() async {
       await isar.foodTypes.put(foodType);
     });
@@ -32,8 +47,11 @@ class IsarVeggieTrack {
     return result;
   }
 
-  Future<FoodType?> readFoodTypeByLabel(String label) async {
+  Future<FoodType> readFoodTypeByLabel(String label) async {
     var result = await isar.foodTypes.filter().labelEqualTo(label).findFirst();
+    if (result == null) {
+      throw IsarException("The FoodType with label $label does not exist");
+    }
     return result;
   }
 
@@ -49,6 +67,12 @@ class IsarVeggieTrack {
   }
 
   Future<void> deleteFoodType(Id id) async {
+    var meal =
+        await isar.meals.filter().foodType((q) => q.idEqualTo(id)).findFirst();
+    if (meal != null) {
+      throw IsarException(
+          "The FoodType with id $id is linked to a meal and cannot be deleted");
+    }
     var foodTypeToDelete = isar.foodTypes.getSync(id);
     if (foodTypeToDelete == null) {
       throw IsarException("The FoodType with id $id does not exist");

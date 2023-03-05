@@ -13,4 +13,9 @@ class FoodType {
       _$FoodTypeFromJson(json);
 
   Map<String, dynamic> toJson() => _$FoodTypeToJson(this);
+
+  @override
+  String toString() {
+    return 'FoodType{label: $label, carbonFootprint: $carbonFootprint}';
+  }
 }

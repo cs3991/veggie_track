@@ -21,4 +21,9 @@ class Meal {
   final foodType = IsarLink<FoodType>();
 
   late int quantity;
+
+  @override
+  String toString() {
+    return 'Meal{id: $id, date: $date, mealType: $mealType, foodType: $foodType, quantity: $quantity}';
+  }
 }

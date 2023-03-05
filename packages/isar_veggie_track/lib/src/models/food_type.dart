@@ -7,4 +7,9 @@ class FoodType {
   Id id = Isar.autoIncrement;
   late String label;
   late double carbonFootprint;
+
+  @override
+  String toString() {
+    return 'FoodType{id: $id, label: $label, carbonFootprint: $carbonFootprint}';
+  }
 }

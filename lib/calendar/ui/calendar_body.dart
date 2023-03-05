@@ -79,7 +79,7 @@ class CalendarBody extends StatelessWidget {
           ),
           const Padding(
             padding: EdgeInsets.all(16),
-            child: SizedBox(height: 400, child: MonthView()),
+            child: SizedBox(height: 440, child: MonthView()),
           ),
         ],
       ),

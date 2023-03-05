@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../bloc/month_days_bloc/month_days_bloc.dart';
 import 'day_tile.dart';
 
 class MonthView extends StatelessWidget {
@@ -11,39 +13,74 @@ class MonthView extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
         const DayOfWeekRow(),
-        SizedBox(
-          height: 350,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: List.generate(
-              5,
-              (weekIndex) => Row(
+        BlocBuilder<MonthDaysBloc, MonthDaysState>(
+          builder: (context, state) {
+            int nbDays;
+            int firstDayOfWeek;
+            if (state is MonthDaysLoaded) {
+              nbDays = DateTime(state.month.year, state.month.month + 1)
+                  .subtract(const Duration(days: 1))
+                  .day;
+              firstDayOfWeek =
+                  DateTime(state.month.year, state.month.month).weekday -
+                      1; // 0 = Monday, 6 = Sunday
+            } else {
+              nbDays = 31;
+              firstDayOfWeek = 0;
+            }
+            return SizedBox(
+              height: 420,
+              child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: List.generate(
-                  7,
-                  (dayOfWeekIndex) => Column(
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.all(3),
-                        child: DayTile(
-                          day: weekIndex * 7 + dayOfWeekIndex + 1,
-                        ),
-                      ),
-                      Text(
-                        '${weekIndex * 7 + dayOfWeekIndex + 1}',
-                        style: Theme.of(context)
-                            .textTheme
-                            .labelMedium!
-                            .copyWith(
-                                color:
-                                    Theme.of(context).colorScheme.onBackground),
-                      ),
-                    ],
+                  6,
+                  (weekIndex) => Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: List.generate(
+                      7,
+                      (dayOfWeekIndex) {
+                        var dayOfMonth =
+                            weekIndex * 7 + dayOfWeekIndex + 1 - firstDayOfWeek;
+                        return Column(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.all(3),
+                              child: dayOfMonth <= nbDays && dayOfMonth >= 1
+                                  ? DayTile(
+                                      day: dayOfMonth,
+                                    )
+                                  : const DayTile(day: null),
+                            ),
+                            dayOfMonth <= nbDays && dayOfMonth >= 1
+                                ? Text(
+                                    '$dayOfMonth',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .labelMedium!
+                                        .copyWith(
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .onBackground),
+                                  )
+                                : Text(
+                                    ' ',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .labelMedium!
+                                        .copyWith(
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .onBackground),
+                                  ),
+                          ],
+                        );
+                      },
+                    ),
                   ),
                 ),
               ),
-            ),
-          ),
+            );
+          },
         ),
       ],
     );

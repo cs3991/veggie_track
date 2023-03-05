@@ -12,7 +12,30 @@ class Day {
   List<Food> lunch;
   List<Food> diner;
 
+  double getLunchCarbonFootprint() {
+    double lunchCarbonFootprint = 0;
+    for (var food in lunch) {
+      lunchCarbonFootprint +=
+          food.quantity / 1000 * food.foodType.carbonFootprint;
+    }
+    return lunchCarbonFootprint;
+  }
+
+  double getDinerCarbonFootprint() {
+    double dinerCarbonFootprint = 0;
+    for (var food in diner) {
+      dinerCarbonFootprint +=
+          food.quantity / 1000 * food.foodType.carbonFootprint;
+    }
+    return dinerCarbonFootprint;
+  }
+
   factory Day.fromJson(Map<String, dynamic> json) => _$DayFromJson(json);
 
   Map<String, dynamic> toJson() => _$DayToJson(this);
+
+  @override
+  String toString() {
+    return 'Day{date: $date, lunch: $lunch, diner: $diner}';
+  }
 }

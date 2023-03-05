@@ -14,4 +14,9 @@ class Food {
   factory Food.fromJson(Map<String, dynamic> json) => _$FoodFromJson(json);
 
   Map<String, dynamic> toJson() => _$FoodToJson(this);
+
+  @override
+  String toString() {
+    return 'Food{foodType: $foodType, quantity: $quantity}';
+  }
 }
