@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
-import 'package:veggie_track/calendar/ui/month_view.dart';
+import 'package:veggie_track/calendar/ui/calendar/month_view.dart';
 
-import '../bloc/month_days_bloc/month_days_bloc.dart';
+import '../../bloc/month_days_bloc/month_days_bloc.dart';
 
 class CalendarBody extends StatelessWidget {
   const CalendarBody({

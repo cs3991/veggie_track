@@ -5,7 +5,22 @@ class VeggieTrackRepository {
   final isarVeggieTrack = isar.IsarVeggieTrack();
 
   VeggieTrackRepository() {
-    // populateFoodTypes();
+    isarVeggieTrack.readAllFoodTypes().then((value) => {
+          if (value.isEmpty) {populateFoodTypes()}
+        });
+    // addDay(models.Day(date: DateTime(2023, 03, 4), lunch: [], diner: []));
+    // addDay(models.Day(date: DateTime(2023, 03, 5), lunch: [
+    //   models.Food(
+    //       foodType: models.FoodType(label: 'beef', carbonFootprint: 5155),
+    //       quantity: 200)
+    // ], diner: [
+    //   models.Food(
+    //       foodType: models.FoodType(label: 'vegetable', carbonFootprint: 5155),
+    //       quantity: 300),
+    //   models.Food(
+    //       foodType: models.FoodType(label: 'carbs', carbonFootprint: 5155),
+    //       quantity: 200)
+    // ]));
   }
 
   Future<void> addFoodType(models.FoodType repoFoodType) async {

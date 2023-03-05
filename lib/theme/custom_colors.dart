@@ -35,25 +35,34 @@ class CustomColors extends ThemeExtension<CustomColors> {
             t,
           ) ??
           highEmission,
-      mediumEmission:
-          Color.lerp(mediumEmission, other.mediumEmission, t) ?? mediumEmission,
-      lowEmission: Color.lerp(lowEmission, other.lowEmission, t) ?? lowEmission,
+      mediumEmission: Color.lerp(
+            mediumEmission,
+            other.mediumEmission,
+            t,
+          ) ??
+          mediumEmission,
+      lowEmission: Color.lerp(
+            lowEmission,
+            other.lowEmission,
+            t,
+          ) ??
+          lowEmission,
     );
   }
 
   Color getEmissionColor(double emissions) {
     // Define the minimum and maximum emissions
     const double minEmissions = 0;
-    const double maxEmissions = 1000;
+    const double maxEmissions = 10000;
 
     // Normalize the emissions value to a value between 0 and 1
     double t = (emissions - minEmissions) / (maxEmissions - minEmissions);
     t = t.clamp(0.0, 1.0);
 
     // Convert the colors to HSVColor objects
-    final HSVColor hsvColor1 = HSVColor.fromColor(highEmission);
+    final HSVColor hsvColor1 = HSVColor.fromColor(lowEmission);
     final HSVColor hsvColor2 = HSVColor.fromColor(mediumEmission);
-    final HSVColor hsvColor3 = HSVColor.fromColor(lowEmission);
+    final HSVColor hsvColor3 = HSVColor.fromColor(highEmission);
 
     // Use HSVColor.lerp to calculate the color at the given emissions value
     if (t <= 0.5) {

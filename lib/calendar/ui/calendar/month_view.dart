@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:veggie_track/calendar/ui/day_view/day_page.dart';
 
-import '../bloc/month_days_bloc/month_days_bloc.dart';
+import '../../bloc/month_days_bloc/month_days_bloc.dart';
 import 'day_tile.dart';
 
 class MonthView extends StatelessWidget {
@@ -46,8 +47,18 @@ class MonthView extends StatelessWidget {
                             Padding(
                               padding: const EdgeInsets.all(3),
                               child: dayOfMonth <= nbDays && dayOfMonth >= 1
-                                  ? DayTile(
-                                      day: dayOfMonth,
+                                  ? InkWell(
+                                      onTap: () {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) => DayPage(),
+                                          ),
+                                        );
+                                      },
+                                      child: DayTile(
+                                        day: dayOfMonth,
+                                      ),
                                     )
                                   : const DayTile(day: null),
                             ),

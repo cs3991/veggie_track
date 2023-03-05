@@ -15,8 +15,7 @@ class Day {
   double getLunchCarbonFootprint() {
     double lunchCarbonFootprint = 0;
     for (var food in lunch) {
-      lunchCarbonFootprint +=
-          food.quantity / 1000 * food.foodType.carbonFootprint;
+      lunchCarbonFootprint += food.quantity * food.foodType.carbonFootprint;
     }
     return lunchCarbonFootprint;
   }
@@ -24,8 +23,7 @@ class Day {
   double getDinerCarbonFootprint() {
     double dinerCarbonFootprint = 0;
     for (var food in diner) {
-      dinerCarbonFootprint +=
-          food.quantity / 1000 * food.foodType.carbonFootprint;
+      dinerCarbonFootprint += food.quantity * food.foodType.carbonFootprint;
     }
     return dinerCarbonFootprint;
   }

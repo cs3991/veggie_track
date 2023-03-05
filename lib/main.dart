@@ -8,7 +8,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:veggie_track/theme/cubit/brightness_cubit.dart';
 import 'package:veggie_track/theme/custom_colors.dart';
 
-import 'calendar/ui/calendar_page.dart';
+import 'calendar/ui/calendar/calendar_page.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();

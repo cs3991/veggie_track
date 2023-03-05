@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:veggie_track/theme/custom_colors.dart';
 
-import '../bloc/month_days_bloc/month_days_bloc.dart';
+import '../../bloc/month_days_bloc/month_days_bloc.dart';
 
 class DayTile extends StatelessWidget {
   final int? day;
@@ -22,7 +22,7 @@ class DayTile extends StatelessWidget {
         BlocBuilder<MonthDaysBloc, MonthDaysState>(
           builder: (context, state) {
             var lunchColor = Colors.transparent;
-            var dinnerColor = Colors.transparent;
+            var dinerColor = Colors.transparent;
             if (state is MonthDaysLoaded) {
               var lunchEmissions =
                   state.days[day - 1].getLunchCarbonFootprint();
@@ -33,12 +33,13 @@ class DayTile extends StatelessWidget {
                       .getEmissionColor(lunchEmissions);
               var dinerEmissions =
                   state.days[day - 1].getDinerCarbonFootprint();
-              dinnerColor = dinerEmissions == 0
+              dinerColor = dinerEmissions == 0
                   ? Colors.transparent
                   : Theme.of(context)
                       .extension<CustomColors>()!
                       .getEmissionColor(dinerEmissions);
             }
+
             return SizedBox(
               height: 41,
               width: 41,
@@ -51,7 +52,7 @@ class DayTile extends StatelessWidget {
                           end: Alignment.bottomRight,
                           colors: [
                             lunchColor,
-                            dinnerColor,
+                            dinerColor,
                             // top Right part
                           ],
                         ),
