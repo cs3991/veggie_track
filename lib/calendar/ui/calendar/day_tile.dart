@@ -6,8 +6,9 @@ import '../../bloc/month_days_bloc/month_days_bloc.dart';
 
 class DayTile extends StatelessWidget {
   final int? day;
+  final bool isToday;
 
-  const DayTile({required this.day, super.key});
+  const DayTile({required this.day, required this.isToday, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -24,20 +25,10 @@ class DayTile extends StatelessWidget {
             var lunchColor = Colors.transparent;
             var dinerColor = Colors.transparent;
             if (state is MonthDaysLoaded) {
-              var lunchEmissions =
-                  state.days[day - 1].getLunchCarbonFootprint();
-              lunchColor = lunchEmissions == 0
-                  ? Colors.transparent
-                  : Theme.of(context)
-                      .extension<CustomColors>()!
-                      .getEmissionColor(lunchEmissions);
-              var dinerEmissions =
-                  state.days[day - 1].getDinerCarbonFootprint();
-              dinerColor = dinerEmissions == 0
-                  ? Colors.transparent
-                  : Theme.of(context)
-                      .extension<CustomColors>()!
-                      .getEmissionColor(dinerEmissions);
+              var lunchEmissions = state.days[day - 1].getLunchCarbonFootprint();
+              lunchColor = lunchEmissions == 0 ? Colors.transparent : Theme.of(context).extension<CustomColors>()!.getEmissionColor(lunchEmissions);
+              var dinerEmissions = state.days[day - 1].getDinerCarbonFootprint();
+              dinerColor = dinerEmissions == 0 ? Colors.transparent : Theme.of(context).extension<CustomColors>()!.getEmissionColor(dinerEmissions);
             }
 
             return SizedBox(
@@ -58,14 +49,18 @@ class DayTile extends StatelessWidget {
                         ),
                         borderRadius: BorderRadius.circular(10),
                         border: Border.all(
-                          color: Theme.of(context).colorScheme.outline,
+                          color: isToday ? Theme.of(context).colorScheme.secondary : Theme.of(context).colorScheme.outline,
                           width: 2,
                         ),
                       )
                     : (state is MonthDaysLoading
                         ? BoxDecoration(
-                            color: Color.fromARGB(60, 128, 128, 128),
+                            // color: Color.fromARGB(26, 128, 128, 128),
                             borderRadius: BorderRadius.circular(10),
+                            border: Border.all(
+                              color: Theme.of(context).colorScheme.outline.withOpacity(0.4),
+                              width: 2,
+                            ),
                           )
                         : BoxDecoration(
                             color: Color.fromARGB(60, 255, 255, 255),

@@ -84,9 +84,7 @@ Meal _mealDeserialize(
   final object = Meal();
   object.date = reader.readDateTime(offsets[0]);
   object.id = id;
-  object.mealType =
-      _MealmealTypeValueEnumMap[reader.readByteOrNull(offsets[1])] ??
-          MealType.lunch;
+  object.mealType = _MealmealTypeValueEnumMap[reader.readByteOrNull(offsets[1])] ?? MealType.lunch;
   object.quantity = reader.readLong(offsets[2]);
   return object;
 }
@@ -101,8 +99,7 @@ P _mealDeserializeProp<P>(
     case 0:
       return (reader.readDateTime(offset)) as P;
     case 1:
-      return (_MealmealTypeValueEnumMap[reader.readByteOrNull(offset)] ??
-          MealType.lunch) as P;
+      return (_MealmealTypeValueEnumMap[reader.readByteOrNull(offset)] ?? MealType.lunch) as P;
     case 2:
       return (reader.readLong(offset)) as P;
     default:
@@ -172,8 +169,7 @@ extension MealQueryWhere on QueryBuilder<Meal, Meal, QWhereClause> {
     });
   }
 
-  QueryBuilder<Meal, Meal, QAfterWhereClause> idGreaterThan(Id id,
-      {bool include = false}) {
+  QueryBuilder<Meal, Meal, QAfterWhereClause> idGreaterThan(Id id, {bool include = false}) {
     return QueryBuilder.apply(this, (query) {
       return query.addWhereClause(
         IdWhereClause.greaterThan(lower: id, includeLower: include),
@@ -181,8 +177,7 @@ extension MealQueryWhere on QueryBuilder<Meal, Meal, QWhereClause> {
     });
   }
 
-  QueryBuilder<Meal, Meal, QAfterWhereClause> idLessThan(Id id,
-      {bool include = false}) {
+  QueryBuilder<Meal, Meal, QAfterWhereClause> idLessThan(Id id, {bool include = false}) {
     return QueryBuilder.apply(this, (query) {
       return query.addWhereClause(
         IdWhereClause.lessThan(upper: id, includeUpper: include),
@@ -312,8 +307,7 @@ extension MealQueryFilter on QueryBuilder<Meal, Meal, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Meal, Meal, QAfterFilterCondition> mealTypeEqualTo(
-      MealType value) {
+  QueryBuilder<Meal, Meal, QAfterFilterCondition> mealTypeEqualTo(MealType value) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
         property: r'mealType',
@@ -421,8 +415,7 @@ extension MealQueryFilter on QueryBuilder<Meal, Meal, QFilterCondition> {
 extension MealQueryObject on QueryBuilder<Meal, Meal, QFilterCondition> {}
 
 extension MealQueryLinks on QueryBuilder<Meal, Meal, QFilterCondition> {
-  QueryBuilder<Meal, Meal, QAfterFilterCondition> foodType(
-      FilterQuery<FoodType> q) {
+  QueryBuilder<Meal, Meal, QAfterFilterCondition> foodType(FilterQuery<FoodType> q) {
     return QueryBuilder.apply(this, (query) {
       return query.link(q, r'foodType');
     });

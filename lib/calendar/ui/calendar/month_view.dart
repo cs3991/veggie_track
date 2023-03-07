@@ -19,12 +19,8 @@ class MonthView extends StatelessWidget {
             int nbDays;
             int firstDayOfWeek;
             if (state is MonthDaysLoaded) {
-              nbDays = DateTime(state.month.year, state.month.month + 1)
-                  .subtract(const Duration(days: 1))
-                  .day;
-              firstDayOfWeek =
-                  DateTime(state.month.year, state.month.month).weekday -
-                      1; // 0 = Monday, 6 = Sunday
+              nbDays = DateTime(state.month.year, state.month.month + 1).subtract(const Duration(days: 1)).day;
+              firstDayOfWeek = DateTime(state.month.year, state.month.month).weekday - 1; // 0 = Monday, 6 = Sunday
             } else {
               nbDays = 31;
               firstDayOfWeek = 0;
@@ -40,14 +36,14 @@ class MonthView extends StatelessWidget {
                     children: List.generate(
                       7,
                       (dayOfWeekIndex) {
-                        var dayOfMonth =
-                            weekIndex * 7 + dayOfWeekIndex + 1 - firstDayOfWeek;
+                        var dayOfMonth = weekIndex * 7 + dayOfWeekIndex + 1 - firstDayOfWeek;
                         return Column(
                           children: [
                             Padding(
                               padding: const EdgeInsets.all(3),
                               child: dayOfMonth <= nbDays && dayOfMonth >= 1
                                   ? InkWell(
+                                      borderRadius: BorderRadius.circular(10),
                                       onTap: () {
                                         Navigator.push(
                                           context,
@@ -58,30 +54,22 @@ class MonthView extends StatelessWidget {
                                       },
                                       child: DayTile(
                                         day: dayOfMonth,
+                                        isToday: state is MonthDaysLoaded &&
+                                            state.month.year == DateTime.now().year &&
+                                            state.month.month == DateTime.now().month &&
+                                            dayOfMonth == DateTime.now().day,
                                       ),
                                     )
-                                  : const DayTile(day: null),
+                                  : const DayTile(day: null, isToday: false),
                             ),
                             dayOfMonth <= nbDays && dayOfMonth >= 1
                                 ? Text(
                                     '$dayOfMonth',
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .labelMedium!
-                                        .copyWith(
-                                            color: Theme.of(context)
-                                                .colorScheme
-                                                .onBackground),
+                                    style: Theme.of(context).textTheme.labelMedium!.copyWith(color: Theme.of(context).colorScheme.onBackground),
                                   )
                                 : Text(
                                     ' ',
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .labelMedium!
-                                        .copyWith(
-                                            color: Theme.of(context)
-                                                .colorScheme
-                                                .onBackground),
+                                    style: Theme.of(context).textTheme.labelMedium!.copyWith(color: Theme.of(context).colorScheme.onBackground),
                                   ),
                           ],
                         );
@@ -108,52 +96,31 @@ class DayOfWeekRow extends StatelessWidget {
       children: [
         Text(
           'L',
-          style: Theme.of(context)
-              .textTheme
-              .labelLarge!
-              .copyWith(color: Theme.of(context).colorScheme.onBackground),
+          style: Theme.of(context).textTheme.labelLarge!.copyWith(color: Theme.of(context).colorScheme.onBackground),
         ),
         Text(
           'M',
-          style: Theme.of(context)
-              .textTheme
-              .labelLarge!
-              .copyWith(color: Theme.of(context).colorScheme.onBackground),
+          style: Theme.of(context).textTheme.labelLarge!.copyWith(color: Theme.of(context).colorScheme.onBackground),
         ),
         Text(
           'M',
-          style: Theme.of(context)
-              .textTheme
-              .labelLarge!
-              .copyWith(color: Theme.of(context).colorScheme.onBackground),
+          style: Theme.of(context).textTheme.labelLarge!.copyWith(color: Theme.of(context).colorScheme.onBackground),
         ),
         Text(
           'J',
-          style: Theme.of(context)
-              .textTheme
-              .labelLarge!
-              .copyWith(color: Theme.of(context).colorScheme.onBackground),
+          style: Theme.of(context).textTheme.labelLarge!.copyWith(color: Theme.of(context).colorScheme.onBackground),
         ),
         Text(
           'V',
-          style: Theme.of(context)
-              .textTheme
-              .labelLarge!
-              .copyWith(color: Theme.of(context).colorScheme.onBackground),
+          style: Theme.of(context).textTheme.labelLarge!.copyWith(color: Theme.of(context).colorScheme.onBackground),
         ),
         Text(
           'S',
-          style: Theme.of(context)
-              .textTheme
-              .labelLarge!
-              .copyWith(color: Theme.of(context).colorScheme.onBackground),
+          style: Theme.of(context).textTheme.labelLarge!.copyWith(color: Theme.of(context).colorScheme.onBackground),
         ),
         Text(
           'D',
-          style: Theme.of(context)
-              .textTheme
-              .labelLarge!
-              .copyWith(color: Theme.of(context).colorScheme.onBackground),
+          style: Theme.of(context).textTheme.labelLarge!.copyWith(color: Theme.of(context).colorScheme.onBackground),
         ),
       ],
     );
