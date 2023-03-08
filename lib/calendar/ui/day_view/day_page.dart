@@ -22,7 +22,7 @@ class DayPage extends StatelessWidget {
         title: Text(DateFormat.MMMMEEEEd().format(date).camelCase()),
       ),
       backgroundColor: Theme.of(context).colorScheme.background,
-      body: DayBody(),
+      body: DayBody(day: day),
     );
   }
 }
