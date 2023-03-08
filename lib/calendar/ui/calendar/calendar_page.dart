@@ -18,10 +18,7 @@ class CalendarPage extends StatelessWidget {
           ThemeSwitcherIcon(),
         ],
       ),
-      body: BlocProvider(
-        create: (context) => MonthDaysBloc(month: DateTime.now()),
-        child: const CalendarBody(),
-      ),
+      body: const CalendarBody(),
     );
   }
 }

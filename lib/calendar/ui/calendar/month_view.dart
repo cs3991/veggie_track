@@ -48,7 +48,9 @@ class MonthView extends StatelessWidget {
                                         Navigator.push(
                                           context,
                                           MaterialPageRoute(
-                                            builder: (context) => DayPage(),
+                                            builder: (context) => DayPage(
+                                              day: dayOfMonth,
+                                            ),
                                           ),
                                         );
                                       },

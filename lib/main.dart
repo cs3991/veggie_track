@@ -4,27 +4,28 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
+import 'package:intl/date_symbol_data_local.dart';
+import 'package:intl/intl.dart';
+import 'package:intl/intl_standalone.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:veggie_track/date_format/date_utils.dart';
 import 'package:veggie_track/theme/cubit/brightness_cubit.dart';
 import 'package:veggie_track/theme/custom_colors.dart';
 
+import 'calendar/bloc/month_days_bloc/month_days_bloc.dart';
 import 'calendar/ui/calendar/calendar_page.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   // Hydrated bloc storage setup:
   HydratedBloc.storage = await HydratedStorage.build(
-    storageDirectory: kIsWeb
-        ? HydratedStorage.webStorageDirectory
-        : await getTemporaryDirectory(),
+    storageDirectory: kIsWeb ? HydratedStorage.webStorageDirectory : await getTemporaryDirectory(),
   );
   // navbar and statusbar color setup:
   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-      systemStatusBarContrastEnforced: false,
-      systemNavigationBarColor: Colors.transparent,
-      systemNavigationBarDividerColor: Colors.transparent));
+      systemStatusBarContrastEnforced: false, systemNavigationBarColor: Colors.transparent, systemNavigationBarDividerColor: Colors.transparent));
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
-
+  await initDateFormatting();
   runApp(const App());
 }
 
@@ -36,6 +37,7 @@ class App extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(create: (context) => BrightnessCubit()),
+        BlocProvider(create: (context) => MonthDaysBloc(month: DateTime.now())),
       ],
       child: BlocBuilder<BrightnessCubit, Brightness>(
         builder: (context, brightness) {
@@ -46,8 +48,7 @@ class App extends StatelessWidget {
             ),
           );
           return DynamicColorBuilder(
-              builder: (lightDynamicColorScheme, darkDynamicColorScheme) =>
-                  MaterialApp(
+              builder: (lightDynamicColorScheme, darkDynamicColorScheme) => MaterialApp(
                     title: 'Veggie Track',
                     debugShowCheckedModeBanner: false,
                     theme: defaultTheme.copyWith(
@@ -60,9 +61,7 @@ class App extends StatelessWidget {
                       brightness: Brightness.dark,
                       extensions: [darkCustomColors],
                     ),
-                    themeMode: brightness == Brightness.dark
-                        ? ThemeMode.dark
-                        : ThemeMode.light,
+                    themeMode: brightness == Brightness.dark ? ThemeMode.dark : ThemeMode.light,
                     home: const CalendarPage(),
                   ));
         },

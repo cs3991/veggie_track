@@ -1,15 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
+import 'package:veggie_track/calendar/bloc/month_days_bloc/month_days_bloc.dart';
+import 'package:veggie_track/date_format/date_utils.dart';
 
 import 'day_body.dart';
 
 class DayPage extends StatelessWidget {
-  const DayPage({super.key});
+  final int day;
+  const DayPage({required this.day, super.key});
 
   @override
   Widget build(BuildContext context) {
+    var date = DateTime(
+      context.read<MonthDaysBloc>().state.month.year,
+      context.read<MonthDaysBloc>().state.month.month,
+      day,
+    );
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Day'),
+        title: Text(DateFormat.MMMMEEEEd().format(date).camelCase()),
       ),
       backgroundColor: Theme.of(context).colorScheme.background,
       body: DayBody(),

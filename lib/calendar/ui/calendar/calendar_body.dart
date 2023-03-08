@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:veggie_track/calendar/ui/calendar/month_view.dart';
+import 'package:veggie_track/date_format/date_utils.dart';
 
 import '../../bloc/month_days_bloc/month_days_bloc.dart';
 
@@ -33,8 +34,7 @@ class CalendarBody extends StatelessWidget {
                   onPressed: () {
                     var bloc = context.read<MonthDaysBloc>();
                     bloc.updateMonth(
-                      DateTime(
-                          bloc.state.month.year, bloc.state.month.month - 1),
+                      DateTime(bloc.state.month.year, bloc.state.month.month - 1),
                     );
                   },
                 ),
@@ -42,17 +42,16 @@ class CalendarBody extends StatelessWidget {
                   style: ElevatedButton.styleFrom(
                     backgroundColor: colors.primaryContainer,
                     elevation: 0,
+                    fixedSize: const Size(150, 40),
                   ),
                   onPressed: () {},
                   child: BlocBuilder<MonthDaysBloc, MonthDaysState>(
                     builder: (context, state) {
                       if (state is MonthDaysInitial) {
-                        context
-                            .read<MonthDaysBloc>()
-                            .updateMonth(DateTime.now());
+                        context.read<MonthDaysBloc>().updateMonth(DateTime.now());
                       }
                       return Text(
-                        DateFormat.yMMMM().format(state.month),
+                        DateFormat.yMMMM().format(state.month).camelCase(),
                         style: Theme.of(context).textTheme.labelLarge!.copyWith(
                               color: colors.onPrimaryContainer,
                             ),
@@ -69,8 +68,7 @@ class CalendarBody extends StatelessWidget {
                   onPressed: () {
                     var bloc = context.read<MonthDaysBloc>();
                     bloc.updateMonth(
-                      DateTime(
-                          bloc.state.month.year, bloc.state.month.month + 1),
+                      DateTime(bloc.state.month.year, bloc.state.month.month + 1),
                     );
                   },
                 ),
