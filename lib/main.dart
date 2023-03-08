@@ -37,7 +37,7 @@ class App extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(create: (context) => BrightnessCubit()),
-        BlocProvider(create: (context) => MonthDaysBloc(month: DateTime.now())),
+        BlocProvider(create: (context) => MonthDaysBloc(date: DateTime.now())),
       ],
       child: BlocBuilder<BrightnessCubit, Brightness>(
         builder: (context, brightness) {

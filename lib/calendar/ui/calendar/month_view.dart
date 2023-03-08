@@ -19,8 +19,8 @@ class MonthView extends StatelessWidget {
             int nbDays;
             int firstDayOfWeek;
             if (state is MonthDaysLoaded) {
-              nbDays = DateTime(state.month.year, state.month.month + 1).subtract(const Duration(days: 1)).day;
-              firstDayOfWeek = DateTime(state.month.year, state.month.month).weekday - 1; // 0 = Monday, 6 = Sunday
+              nbDays = DateTime(state.date.year, state.date.month + 1).subtract(const Duration(days: 1)).day;
+              firstDayOfWeek = DateTime(state.date.year, state.date.month).weekday - 1; // 0 = Monday, 6 = Sunday
             } else {
               nbDays = 31;
               firstDayOfWeek = 0;
@@ -45,20 +45,19 @@ class MonthView extends StatelessWidget {
                                   ? InkWell(
                                       borderRadius: BorderRadius.circular(10),
                                       onTap: () {
+                                        context.read<MonthDaysBloc>().updateDayInSameMonth(dayOfMonth);
                                         Navigator.push(
                                           context,
                                           MaterialPageRoute(
-                                            builder: (context) => DayPage(
-                                              day: dayOfMonth,
-                                            ),
+                                            builder: (context) => DayPage(),
                                           ),
                                         );
                                       },
                                       child: DayTile(
                                         day: dayOfMonth,
                                         isToday: state is MonthDaysLoaded &&
-                                            state.month.year == DateTime.now().year &&
-                                            state.month.month == DateTime.now().month &&
+                                            state.date.year == DateTime.now().year &&
+                                            state.date.month == DateTime.now().month &&
                                             dayOfMonth == DateTime.now().day,
                                       ),
                                     )

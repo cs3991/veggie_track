@@ -32,10 +32,7 @@ class CalendarBody extends StatelessWidget {
                   ),
                   icon: const Icon(Icons.arrow_back_ios_rounded),
                   onPressed: () {
-                    var bloc = context.read<MonthDaysBloc>();
-                    bloc.updateMonth(
-                      DateTime(bloc.state.month.year, bloc.state.month.month - 1),
-                    );
+                    context.read<MonthDaysBloc>().previousMonth();
                   },
                 ),
                 ElevatedButton(
@@ -51,7 +48,7 @@ class CalendarBody extends StatelessWidget {
                         context.read<MonthDaysBloc>().updateMonth(DateTime.now());
                       }
                       return Text(
-                        DateFormat.yMMMM().format(state.month).camelCase(),
+                        DateFormat.yMMMM().format(state.date).camelCase(),
                         style: Theme.of(context).textTheme.labelLarge!.copyWith(
                               color: colors.onPrimaryContainer,
                             ),
@@ -66,10 +63,7 @@ class CalendarBody extends StatelessWidget {
                   ),
                   icon: const Icon(Icons.arrow_forward_ios_rounded),
                   onPressed: () {
-                    var bloc = context.read<MonthDaysBloc>();
-                    bloc.updateMonth(
-                      DateTime(bloc.state.month.year, bloc.state.month.month + 1),
-                    );
+                    context.read<MonthDaysBloc>().nextMonth();
                   },
                 ),
               ],

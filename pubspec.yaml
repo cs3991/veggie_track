@@ -18,10 +18,12 @@ dependencies:
   path_provider: ^2.0.11
   color: ^3.0.0
   intl: ^0.18.0
+  meta: 
   isar_veggie_track:
     path: packages/isar_veggie_track
   veggie_track_repository:
     path: packages/veggie_track_repository
+
 
 dev_dependencies:
   flutter_test:

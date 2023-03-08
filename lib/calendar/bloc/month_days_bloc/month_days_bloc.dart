@@ -9,23 +9,35 @@ part 'month_days_state.dart';
 class MonthDaysBloc extends Cubit<MonthDaysState> {
   final veggieTrackRepository = VeggieTrackRepository();
 
-  MonthDaysBloc({required DateTime month})
-      : super(MonthDaysInitial(month: month));
+  MonthDaysBloc({required DateTime date}) : super(MonthDaysInitial(date: date));
 
-  Future<void> updateMonth(DateTime month) async {
-    print('MonthDaysUpdateRequested: $month');
-    emit(MonthDaysLoading(month: month));
-    await Future.delayed(const Duration(milliseconds: 100));
+  Future<void> updateMonth(DateTime date) async {
+    emit(MonthDaysLoading(date: date));
+    // await Future.delayed(const Duration(milliseconds: 100));
     try {
       var days = <Day>[];
-      for (DateTime dayDateTime in _getDaysOfMonth(month)) {
+      for (DateTime dayDateTime in _getDaysOfMonth(date)) {
         days.add(await veggieTrackRepository.getDay(dayDateTime));
       }
-      emit(MonthDaysLoaded(month: month, days: days));
+      emit(MonthDaysLoaded(date: date, days: days));
     } catch (e) {
-      emit(MonthDaysError(month: month, errorMessage: e.toString()));
+      emit(MonthDaysError(date: date, errorMessage: e.toString()));
       rethrow;
     }
+  }
+
+  Future<void> nextMonth() async {
+    updateMonth(DateTime(state.date.year, state.date.month + 1));
+  }
+
+  Future<void> previousMonth() async {
+    updateMonth(DateTime(state.date.year, state.date.month - 1));
+  }
+
+  void updateDayInSameMonth(int dayOfMonth) {
+    emit(state.copyWith(
+      date: DateTime(state.date.year, state.date.month, dayOfMonth),
+    ));
   }
 
   static List<DateTime> _getDaysOfMonth(DateTime month) {

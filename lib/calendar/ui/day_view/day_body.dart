@@ -1,14 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:veggie_track/theme/custom_colors.dart';
-import 'package:veggie_track_repository/veggie_track_repository.dart';
 
 import '../../bloc/month_days_bloc/month_days_bloc.dart';
 
 class DayBody extends StatelessWidget {
-  final int day;
   const DayBody({
-    required this.day,
     super.key,
   });
 
@@ -27,7 +24,6 @@ class DayBody extends StatelessWidget {
             child: MealCard(
               title: 'Déjeuner',
               mealType: MealType.lunch,
-              dayOfMonth: day,
             ),
           ),
         ),
@@ -38,7 +34,6 @@ class DayBody extends StatelessWidget {
             child: MealCard(
               title: 'Diner',
               mealType: MealType.diner,
-              dayOfMonth: day,
             ),
           ),
         ),
@@ -50,13 +45,11 @@ class DayBody extends StatelessWidget {
 class MealCard extends StatelessWidget {
   final String title;
   final MealType mealType;
-  final int dayOfMonth;
 
   const MealCard({
     Key? key,
     required this.title,
     required this.mealType,
-    required this.dayOfMonth,
   }) : super(key: key);
 
   @override
@@ -80,7 +73,7 @@ class MealCard extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(vertical: 10),
                   child: BlocBuilder<MonthDaysBloc, MonthDaysState>(
                     builder: (context, state) {
-                      var day = (state is MonthDaysLoaded) ? state.days[dayOfMonth - 1] : null;
+                      var day = (state is MonthDaysLoaded) ? state.days[state.date.day - 1] : null;
                       var mealOrNull = mealType == MealType.lunch ? day?.lunch : day?.diner;
                       var itemCount = mealOrNull?.length == null ? 1 : mealOrNull!.length + 1;
                       return ListView.builder(
@@ -102,7 +95,7 @@ class MealCard extends StatelessWidget {
                           } else {
                             var meal = mealOrNull!; // If we build an item, then meal is not null.
                             var food = meal[index];
-                            var carbonEmissions = food.foodType.carbonFootprint * food.quantity;
+                            var carbonEmissions = (food.foodType.carbonFootprint * food.quantity).toInt();
                             return Padding(
                               padding: const EdgeInsets.symmetric(vertical: 4),
                               child: ListTile(
@@ -123,9 +116,9 @@ class MealCard extends StatelessWidget {
                                       ),
                                 ),
                                 trailing: Text(
-                                  '${carbonEmissions} gCO2eq',
+                                  '$carbonEmissions gCO2eq',
                                   style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                                        color: Theme.of(context).extension<CustomColors>()!.getEmissionColor(2000),
+                                        color: Theme.of(context).extension<CustomColors>()!.getEmissionColor(carbonEmissions.toDouble()),
                                       ),
                                 ),
                               ),

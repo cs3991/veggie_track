@@ -7,22 +7,17 @@ import 'package:veggie_track/date_format/date_utils.dart';
 import 'day_body.dart';
 
 class DayPage extends StatelessWidget {
-  final int day;
-  const DayPage({required this.day, super.key});
+  const DayPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    var date = DateTime(
-      context.read<MonthDaysBloc>().state.month.year,
-      context.read<MonthDaysBloc>().state.month.month,
-      day,
-    );
+    var date = context.read<MonthDaysBloc>().state.date;
     return Scaffold(
       appBar: AppBar(
         title: Text(DateFormat.MMMMEEEEd().format(date).camelCase()),
       ),
       backgroundColor: Theme.of(context).colorScheme.background,
-      body: DayBody(day: day),
+      body: DayBody(),
     );
   }
 }
