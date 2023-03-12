@@ -17,7 +17,7 @@ class DayPage extends StatelessWidget {
         title: Text(DateFormat.MMMMEEEEd().format(date).camelCase()),
       ),
       backgroundColor: Theme.of(context).colorScheme.background,
-      body: const DayBody(),
+      body: DayBody(),
     );
   }
 }

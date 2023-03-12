@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:veggie_track/calendar/bloc/meal_edit_cubit/meal_edit_cubit.dart';
 import 'package:veggie_track_repository/veggie_track_repository.dart';
 
 import '../../../theme/custom_colors.dart';
@@ -40,6 +41,7 @@ class MealCard extends StatelessWidget {
                       var day = (state is MonthDaysLoaded) ? state.days[state.date.day - 1] : null;
                       var mealOrNull = mealType == MealType.lunch ? day?.lunch : day?.diner;
                       var itemCount = mealOrNull?.length == null ? 1 : mealOrNull!.length + 1;
+                      var date = state.date;
                       return ListView.builder(
                         itemCount: itemCount,
                         itemBuilder: (context, index) {
@@ -50,12 +52,14 @@ class MealCard extends StatelessWidget {
                                 style: ElevatedButton.styleFrom(
                                   shape: const CircleBorder(),
                                   padding: const EdgeInsets.all(20),
-                                  backgroundColor: Theme.of(context).colorScheme.primaryContainer, // <-- Button color
+                                  backgroundColor: Theme.of(context).colorScheme.secondary,
                                 ),
-                                onPressed: () {},
+                                onPressed: () {
+                                  context.read<MealEditCubit>().addFood(date, mealType);
+                                },
                                 child: Icon(
                                   Icons.add,
-                                  color: Theme.of(context).colorScheme.onPrimaryContainer,
+                                  color: Theme.of(context).colorScheme.onSecondary,
                                 ),
                               ),
                             );
