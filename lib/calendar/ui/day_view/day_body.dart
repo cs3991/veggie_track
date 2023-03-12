@@ -1,14 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:veggie_track/theme/custom_colors.dart';
+import 'package:veggie_track_repository/veggie_track_repository.dart';
+import 'context_menu_region.dart';
 
 import '../../bloc/month_days_bloc/month_days_bloc.dart';
 
-class DayBody extends StatelessWidget {
-  const DayBody({
+class DayBody extends StatefulWidget {
+  DayBody({
     super.key,
   });
 
+  @override
+  State<DayBody> createState() => _DayBodyState();
+}
+
+class _DayBodyState extends State<DayBody> {
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -46,7 +53,7 @@ class MealCard extends StatelessWidget {
   final String title;
   final MealType mealType;
 
-  const MealCard({
+  MealCard({
     Key? key,
     required this.title,
     required this.mealType,
@@ -98,28 +105,47 @@ class MealCard extends StatelessWidget {
                             var carbonEmissions = (food.foodType.carbonFootprint * food.quantity).toInt();
                             return Padding(
                               padding: const EdgeInsets.symmetric(vertical: 4),
-                              child: ListTile(
-                                tileColor: Theme.of(context).colorScheme.primaryContainer,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(7),
-                                ),
-                                title: Text(
-                                  food.foodType.label,
-                                  style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                                        color: Theme.of(context).colorScheme.onPrimaryContainer,
+                              child: ContextMenuRegion(
+                                contextMenuBuilder: (context, offset) {
+                                  return AdaptiveTextSelectionToolbar.buttonItems(
+                                    anchors: TextSelectionToolbarAnchors(
+                                      primaryAnchor: offset,
+                                    ),
+                                    buttonItems: <ContextMenuButtonItem>[
+                                      ContextMenuButtonItem(
+                                        label: 'Supprimer',
+                                        onPressed: () {
+                                          ContextMenuController.removeAny();
+                                          context.read<MonthDaysBloc>().deleteFood(state.date, mealType, index);
+                                        },
                                       ),
-                                ),
-                                subtitle: Text(
-                                  '${food.quantity.toString()} g',
-                                  style: Theme.of(context).textTheme.labelSmall!.copyWith(
-                                        color: Theme.of(context).colorScheme.onPrimaryContainer,
-                                      ),
-                                ),
-                                trailing: Text(
-                                  '$carbonEmissions gCO2eq',
-                                  style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                                        color: Theme.of(context).extension<CustomColors>()!.getEmissionColor(carbonEmissions.toDouble()),
-                                      ),
+                                    ],
+                                  );
+                                },
+                                child: ListTile(
+                                  tileColor: Theme.of(context).colorScheme.primaryContainer,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(7),
+                                  ),
+                                  // onTap: () {},
+                                  title: Text(
+                                    food.foodType.label,
+                                    style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                                          color: Theme.of(context).colorScheme.onPrimaryContainer,
+                                        ),
+                                  ),
+                                  subtitle: Text(
+                                    '${food.quantity.toString()} g',
+                                    style: Theme.of(context).textTheme.labelSmall!.copyWith(
+                                          color: Theme.of(context).colorScheme.onPrimaryContainer,
+                                        ),
+                                  ),
+                                  trailing: Text(
+                                    '$carbonEmissions gCO2eq',
+                                    style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                                          color: Theme.of(context).extension<CustomColors>()!.getEmissionColor(carbonEmissions.toDouble()),
+                                        ),
+                                  ),
                                 ),
                               ),
                             );
@@ -137,5 +163,3 @@ class MealCard extends StatelessWidget {
     );
   }
 }
-
-enum MealType { lunch, diner }

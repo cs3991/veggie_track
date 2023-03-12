@@ -30,13 +30,13 @@ void main() async {
     );
     test('updating a FoodType', () async {
       var apple = await isar.readFoodTypeByLabel('Apple');
-      await isar.updateFoodType(apple!.id, apple..carbonFootprint = 0.6);
+      await isar.updateFoodType(apple.id, apple..carbonFootprint = 0.6);
       var apple2 = await isar.readFoodType(apple.id);
       expect(apple2.carbonFootprint, 0.6);
     });
     test('deleting a FoodType', () async {
       var apple = await isar.readFoodTypeByLabel('Apple');
-      await isar.deleteFoodType(apple!.id);
+      await isar.deleteFoodType(apple.id);
       expect(
         () async => isar.readFoodType(apple.id),
         throwsA(isA<IsarException>()),
@@ -68,12 +68,8 @@ void main() async {
                       .having((d) => d.month, 'month', date.month)
                       .having((d) => d.year, 'year', date.year))
               .having((m) => m.mealType, 'mealType', MealType.lunch)
-              .having(
-                  (m) => m.foodType.value,
-                  'foodType',
-                  isA<FoodType>()
-                      .having((f) => f.label, 'label', 'Apple')
-                      .having((f) => f.carbonFootprint, 'carbonFootprint', 0.5))
+              .having((m) => m.foodType.value, 'foodType',
+                  isA<FoodType>().having((f) => f.label, 'label', 'Apple').having((f) => f.carbonFootprint, 'carbonFootprint', 0.5))
               .having((m) => m.quantity, 'quantity', 100));
     });
 

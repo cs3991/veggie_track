@@ -40,6 +40,24 @@ class MonthDaysBloc extends Cubit<MonthDaysState> {
     ));
   }
 
+  Future<void> deleteFood(DateTime dateTime, MealType mealType, int foodId) async {
+    if (state is MonthDaysLoaded) {
+      final MonthDaysLoaded state = this.state as MonthDaysLoaded;
+      if (mealType == MealType.lunch) {
+        var newFoodList = List<Food>.from(state.days[dateTime.day - 1].lunch);
+        newFoodList.removeAt(foodId);
+        await veggieTrackRepository.editDay(Day(date: dateTime, lunch: newFoodList, diner: state.days[dateTime.day - 1].diner));
+      } else {
+        var newFoodList = List<Food>.from(state.days[dateTime.day - 1].diner);
+        newFoodList.removeAt(foodId);
+        await veggieTrackRepository.editDay(Day(date: dateTime, lunch: state.days[dateTime.day - 1].lunch, diner: newFoodList));
+      }
+      await updateMonth(state.date);
+    } else {
+      throw Exception('State was not MonthDaysLoaded while deleteFood was called');
+    }
+  }
+
   static List<DateTime> _getDaysOfMonth(DateTime month) {
     final days = <DateTime>[];
     DateTime day = DateTime(month.year, month.month, 1);
