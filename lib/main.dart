@@ -4,9 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
-import 'package:intl/date_symbol_data_local.dart';
-import 'package:intl/intl.dart';
-import 'package:intl/intl_standalone.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:veggie_track/date_format/date_utils.dart';
 import 'package:veggie_track/theme/cubit/brightness_cubit.dart';
@@ -54,12 +51,12 @@ class App extends StatelessWidget {
                     theme: defaultTheme.copyWith(
                       colorScheme: lightDynamicColorScheme,
                       // brightness: Brightness.light,
-                      extensions: [lightCustomColors],
+                      extensions: [darkCustomColors],
                     ),
                     darkTheme: defaultTheme.copyWith(
                       colorScheme: darkDynamicColorScheme,
                       brightness: Brightness.dark,
-                      extensions: [darkCustomColors],
+                      extensions: [lightCustomColors],
                     ),
                     themeMode: brightness == Brightness.dark ? ThemeMode.dark : ThemeMode.light,
                     home: const CalendarPage(),

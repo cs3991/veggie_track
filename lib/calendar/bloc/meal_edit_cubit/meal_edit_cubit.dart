@@ -5,17 +5,33 @@ import 'package:veggie_track_repository/veggie_track_repository.dart';
 part 'meal_edit_state.dart';
 
 class MealEditCubit extends Cubit<MealEditState> {
-  MealEditCubit() : super(MealEditInitial());
+  final DateTime dateTime;
+  final MealType mealType;
 
-  void addFood(DateTime dateTime, MealType mealType) async {
-    emit(MealEditChooseFood(dateTime: dateTime, mealType: mealType));
+  MealEditCubit({required this.dateTime, required this.mealType}) : super(MealEditInitial());
+
+  void addFood({int? mealEditedId}) async {
+    assert(state is MealEditInitial);
+    emit(MealEditChooseFood(
+      dateTime: dateTime,
+      mealType: mealType,
+      mealEditedId: mealEditedId,
+    ));
   }
 
-  void foodChosen(DateTime dateTime, MealType mealType, FoodType foodType) async {
-    emit(MealEditChooseQuantity(dateTime: dateTime, mealType: mealType, foodType: foodType));
+  void foodChosen(FoodType foodType) async {
+    assert(this.state is MealEditChooseFood);
+    var state = this.state as MealEditChooseFood;
+    emit(MealEditChooseQuantity(
+      dateTime: dateTime,
+      mealType: mealType,
+      foodType: foodType,
+      mealEditedId: state.mealEditedId,
+    ));
   }
 
-  void quantityChosen(DateTime dateTime, MealType mealType, int quantity) async {
+  void quantityChosen(int quantity) async {
+    assert(state is MealEditChooseQuantity);
     emit(MealEditInitial());
   }
 }

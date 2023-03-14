@@ -46,11 +46,14 @@ class MonthDaysBloc extends Cubit<MonthDaysState> {
       if (mealType == MealType.lunch) {
         var newFoodList = List<Food>.from(state.days[dateTime.day - 1].lunch);
         newFoodList.removeAt(foodId);
-        await veggieTrackRepository.editDay(Day(date: dateTime, lunch: newFoodList, diner: state.days[dateTime.day - 1].diner));
+        // todo : optimize this
+        await veggieTrackRepository
+            .editDay(Day(date: dateTime, lunch: newFoodList, diner: state.days[dateTime.day - 1].diner));
       } else {
         var newFoodList = List<Food>.from(state.days[dateTime.day - 1].diner);
         newFoodList.removeAt(foodId);
-        await veggieTrackRepository.editDay(Day(date: dateTime, lunch: state.days[dateTime.day - 1].lunch, diner: newFoodList));
+        await veggieTrackRepository
+            .editDay(Day(date: dateTime, lunch: state.days[dateTime.day - 1].lunch, diner: newFoodList));
       }
       await updateMonth(state.date);
     } else {
@@ -77,6 +80,45 @@ class MonthDaysBloc extends Cubit<MonthDaysState> {
       await updateMonth(state.date);
     } else {
       throw Exception('State was not MonthDaysLoaded while addFood was called');
+    }
+  }
+
+  Future<void> editFood(
+    DateTime dateTime,
+    MealType mealType,
+    int foodId,
+    FoodType foodType,
+    int quantity,
+  ) async {
+    print('editFood called');
+    if (state is MonthDaysLoaded) {
+      final MonthDaysLoaded state = this.state as MonthDaysLoaded;
+      if (mealType == MealType.lunch) {
+        var newFoodList = List<Food>.from(state.days[dateTime.day - 1].lunch);
+        newFoodList[foodId] = Food(
+          foodType: foodType,
+          quantity: quantity,
+        );
+        await veggieTrackRepository.editDay(Day(
+          date: dateTime,
+          lunch: newFoodList,
+          diner: state.days[dateTime.day - 1].diner,
+        ));
+      } else {
+        var newFoodList = List<Food>.from(state.days[dateTime.day - 1].diner);
+        newFoodList[foodId] = Food(
+          foodType: foodType,
+          quantity: quantity,
+        );
+        await veggieTrackRepository.editDay(Day(
+          date: dateTime,
+          lunch: state.days[dateTime.day - 1].lunch,
+          diner: newFoodList,
+        ));
+      }
+      await updateMonth(state.date);
+    } else {
+      throw Exception('State was not MonthDaysLoaded while editFood was called');
     }
   }
 

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:veggie_track_repository/veggie_track_repository.dart';
 
-import '../../../theme/custom_colors.dart';
 import '../../bloc/meal_edit_cubit/meal_edit_cubit.dart';
 import '../../bloc/month_days_bloc/month_days_bloc.dart';
 
@@ -77,12 +76,14 @@ class ChooseQuantityCard extends StatelessWidget {
                 onPressed: () {
                   var date = context.read<MonthDaysBloc>().state.date;
                   var foodType = (context.read<MealEditCubit>().state as MealEditChooseQuantity).foodType;
-                  context.read<MonthDaysBloc>().addFood(date, mealType, foodType, quantity);
-                  context.read<MealEditCubit>().quantityChosen(
-                        date,
-                        mealType,
-                        quantity,
-                      );
+                  var mealEditedId =
+                      (context.read<MealEditCubit>().state as MealEditChooseQuantity).mealEditedId;
+                  if (mealEditedId != null) {
+                    context.read<MonthDaysBloc>().editFood(date, mealType, mealEditedId, foodType, quantity);
+                  } else {
+                    context.read<MonthDaysBloc>().addFood(date, mealType, foodType, quantity);
+                  }
+                  context.read<MealEditCubit>().quantityChosen(quantity);
                 },
                 child: Text("Valider"),
               ),

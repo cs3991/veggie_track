@@ -60,8 +60,6 @@ class ChooseFoodCard extends StatelessWidget {
                                   onTap: () {
                                     var date = context.read<MonthDaysBloc>().state.date;
                                     context.read<MealEditCubit>().foodChosen(
-                                          date,
-                                          mealType,
                                           foodTypes[index],
                                         );
                                   },
@@ -74,8 +72,9 @@ class ChooseFoodCard extends StatelessWidget {
                                   trailing: Text(
                                     foodTypes[index].carbonFootprint.toString() + ' kgCO2eq/kg',
                                     style: Theme.of(context).textTheme.labelMedium!.copyWith(
-                                          color:
-                                              Theme.of(context).extension<CustomColors>()!.getEmissionColor(foodTypes[index].carbonFootprint * 200),
+                                          color: Theme.of(context)
+                                              .extension<CustomColors>()!
+                                              .getEmissionColor(foodTypes[index].carbonFootprint * 200),
                                         ),
                                   ),
                                 ),

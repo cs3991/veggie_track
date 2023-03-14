@@ -55,7 +55,7 @@ class MealCard extends StatelessWidget {
                                   backgroundColor: Theme.of(context).colorScheme.secondary,
                                 ),
                                 onPressed: () {
-                                  context.read<MealEditCubit>().addFood(date, mealType);
+                                  context.read<MealEditCubit>().addFood();
                                 },
                                 child: Icon(
                                   Icons.add,
@@ -80,35 +80,44 @@ class MealCard extends StatelessWidget {
                                         label: 'Supprimer',
                                         onPressed: () {
                                           ContextMenuController.removeAny();
-                                          context.read<MonthDaysBloc>().deleteFood(state.date, mealType, index);
+                                          context
+                                              .read<MonthDaysBloc>()
+                                              .deleteFood(state.date, mealType, index);
                                         },
                                       ),
                                     ],
                                   );
                                 },
-                                child: ListTile(
-                                  tileColor: Theme.of(context).colorScheme.primaryContainer,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(7),
-                                  ),
-                                  // onTap: () {},
-                                  title: Text(
-                                    food.foodType.label,
-                                    style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                                          color: Theme.of(context).colorScheme.onPrimaryContainer,
-                                        ),
-                                  ),
-                                  subtitle: Text(
-                                    '${food.quantity.toString()} g',
-                                    style: Theme.of(context).textTheme.labelSmall!.copyWith(
-                                          color: Theme.of(context).colorScheme.onPrimaryContainer,
-                                        ),
-                                  ),
-                                  trailing: Text(
-                                    '$carbonEmissions gCO2eq',
-                                    style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                                          color: Theme.of(context).extension<CustomColors>()!.getEmissionColor(carbonEmissions.toDouble()),
-                                        ),
+                                child: GestureDetector(
+                                  onTap: () {
+                                    context.read<MealEditCubit>().addFood(mealEditedId: index);
+                                  },
+                                  child: ListTile(
+                                    tileColor: Theme.of(context).colorScheme.primaryContainer,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(7),
+                                    ),
+                                    // onTap: () {},
+                                    title: Text(
+                                      food.foodType.label,
+                                      style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                                            color: Theme.of(context).colorScheme.onPrimaryContainer,
+                                          ),
+                                    ),
+                                    subtitle: Text(
+                                      '${food.quantity.toString()} g',
+                                      style: Theme.of(context).textTheme.labelSmall!.copyWith(
+                                            color: Theme.of(context).colorScheme.onPrimaryContainer,
+                                          ),
+                                    ),
+                                    trailing: Text(
+                                      '$carbonEmissions gCO2eq',
+                                      style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                                            color: Theme.of(context)
+                                                .extension<CustomColors>()!
+                                                .getEmissionColor(carbonEmissions.toDouble()),
+                                          ),
+                                    ),
                                   ),
                                 ),
                               ),
