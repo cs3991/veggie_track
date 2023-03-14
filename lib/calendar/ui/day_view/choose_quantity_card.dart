@@ -9,6 +9,7 @@ import '../../bloc/month_days_bloc/month_days_bloc.dart';
 class ChooseQuantityCard extends StatelessWidget {
   final String title;
   final MealType mealType;
+  int quantity = 25;
 
   ChooseQuantityCard({
     Key? key,
@@ -23,7 +24,7 @@ class ChooseQuantityCard extends StatelessWidget {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
       child: Center(
         child: Padding(
-          padding: const EdgeInsets.all(10),
+          padding: const EdgeInsets.all(15),
           child: Column(
             children: [
               Text(
@@ -32,19 +33,36 @@ class ChooseQuantityCard extends StatelessWidget {
                       color: Theme.of(context).colorScheme.onSurface,
                     ),
               ),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 10),
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    "Quantité",
+                    style: Theme.of(context).textTheme.labelMedium!.copyWith(
+                          color: Theme.of(context).colorScheme.onSurface,
+                        ),
+                  ),
+                ),
+              ),
               Expanded(
                 child: Padding(
                   padding: const EdgeInsets.symmetric(vertical: 10),
                   child: ListWheelScrollView(
                     itemExtent: 30,
                     diameterRatio: 1.05,
-                    magnification: 1.2,
+                    magnification: 1.3,
+                    useMagnifier: true,
+                    overAndUnderCenterOpacity: 0.5,
+                    onSelectedItemChanged: (index) {
+                      quantity = (index + 1) * 25;
+                    },
                     children: List.generate(
                       20,
                       (index) => Text(
                         ((index + 1) * 25).toString() + " g",
                         style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                              color: Theme.of(context).colorScheme.onPrimaryContainer,
+                              color: Theme.of(context).colorScheme.onSurface,
                             ),
                       ),
                     ),
@@ -58,11 +76,12 @@ class ChooseQuantityCard extends StatelessWidget {
                 ),
                 onPressed: () {
                   var date = context.read<MonthDaysBloc>().state.date;
-
+                  var foodType = (context.read<MealEditCubit>().state as MealEditChooseQuantity).foodType;
+                  context.read<MonthDaysBloc>().addFood(date, mealType, foodType, quantity);
                   context.read<MealEditCubit>().quantityChosen(
                         date,
                         mealType,
-                        0,
+                        quantity,
                       );
                 },
                 child: Text("Valider"),

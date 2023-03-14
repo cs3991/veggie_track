@@ -23,8 +23,7 @@ class CustomColors extends ThemeExtension<CustomColors> {
   }
 
   @override
-  ThemeExtension<CustomColors> lerp(
-      ThemeExtension<CustomColors>? other, double t) {
+  ThemeExtension<CustomColors> lerp(ThemeExtension<CustomColors>? other, double t) {
     if (other is! CustomColors) {
       return this;
     }
@@ -53,7 +52,7 @@ class CustomColors extends ThemeExtension<CustomColors> {
   Color getEmissionColor(double emissions) {
     // Define the minimum and maximum emissions
     const double minEmissions = 0;
-    const double maxEmissions = 10000;
+    const double maxEmissions = 4000;
 
     // Normalize the emissions value to a value between 0 and 1
     double t = (emissions - minEmissions) / (maxEmissions - minEmissions);

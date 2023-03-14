@@ -68,9 +68,34 @@ class _DayBodyState extends State<DayBody> {
           flex: 1,
           child: Padding(
             padding: EdgeInsets.all(20),
-            child: MealCard(
-              title: 'Diner',
-              mealType: MealType.diner,
+            child: BlocProvider(
+              create: (context) => MealEditCubit(),
+              child: Builder(builder: (context) {
+                return BlocBuilder<MealEditCubit, MealEditState>(
+                  builder: (context, state) {
+                    if (state is MealEditInitial) {
+                      return MealCard(
+                        title: 'Dîner',
+                        mealType: MealType.diner,
+                      );
+                    }
+                    if (state is MealEditChooseFood) {
+                      return ChooseFoodCard(
+                        title: 'Dîner',
+                        mealType: MealType.diner,
+                      );
+                    }
+                    if (state is MealEditChooseQuantity) {
+                      return ChooseQuantityCard(
+                        title: 'Dîner',
+                        mealType: MealType.diner,
+                      );
+                    } else {
+                      throw Exception('Unknown state');
+                    }
+                  },
+                );
+              }),
             ),
           ),
         ),
