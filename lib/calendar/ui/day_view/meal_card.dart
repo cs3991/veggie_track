@@ -88,36 +88,33 @@ class MealCard extends StatelessWidget {
                                     ],
                                   );
                                 },
-                                child: GestureDetector(
+                                child: ListTile(
+                                  tileColor: Theme.of(context).colorScheme.primaryContainer,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(7),
+                                  ),
                                   onTap: () {
                                     context.read<MealEditCubit>().addFood(mealEditedId: index);
                                   },
-                                  child: ListTile(
-                                    tileColor: Theme.of(context).colorScheme.primaryContainer,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(7),
-                                    ),
-                                    // onTap: () {},
-                                    title: Text(
-                                      food.foodType.label,
-                                      style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                                            color: Theme.of(context).colorScheme.onPrimaryContainer,
-                                          ),
-                                    ),
-                                    subtitle: Text(
-                                      '${food.quantity.toString()} g',
-                                      style: Theme.of(context).textTheme.labelSmall!.copyWith(
-                                            color: Theme.of(context).colorScheme.onPrimaryContainer,
-                                          ),
-                                    ),
-                                    trailing: Text(
-                                      '$carbonEmissions gCO2eq',
-                                      style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                                            color: Theme.of(context)
-                                                .extension<CustomColors>()!
-                                                .getEmissionColor(carbonEmissions.toDouble()),
-                                          ),
-                                    ),
+                                  title: Text(
+                                    food.foodType.label,
+                                    style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                                          color: Theme.of(context).colorScheme.onPrimaryContainer,
+                                        ),
+                                  ),
+                                  subtitle: Text(
+                                    '${food.quantity.toString()} g',
+                                    style: Theme.of(context).textTheme.labelSmall!.copyWith(
+                                          color: Theme.of(context).colorScheme.onPrimaryContainer,
+                                        ),
+                                  ),
+                                  trailing: Text(
+                                    '$carbonEmissions gCO2eq',
+                                    style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                                          color: Theme.of(context)
+                                              .extension<CustomColors>()!
+                                              .getEmissionColor(carbonEmissions.toDouble()),
+                                        ),
                                   ),
                                 ),
                               ),

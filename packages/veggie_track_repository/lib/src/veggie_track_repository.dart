@@ -45,9 +45,8 @@ class VeggieTrackRepository {
   Future<List<models.FoodType>> getAllFoodTypes() async {
     var isarFoodTypes = await isarVeggieTrack.readAllFoodTypes();
     var repoFoodTypes = isarFoodTypes
-        .map<models.FoodType>((isarFoodType) => models.FoodType(
-            label: isarFoodType.label,
-            carbonFootprint: isarFoodType.carbonFootprint))
+        .map<models.FoodType>((isarFoodType) =>
+            models.FoodType(label: isarFoodType.label, carbonFootprint: isarFoodType.carbonFootprint))
         .toList();
     return repoFoodTypes;
   }
@@ -58,8 +57,7 @@ class VeggieTrackRepository {
       var new_meal = isar.Meal()
         ..date = day.date
         ..mealType = isar.MealType.lunch
-        ..foodType.value =
-            await isarVeggieTrack.readFoodTypeByLabel(food.foodType.label)
+        ..foodType.value = await isarVeggieTrack.readFoodTypeByLabel(food.foodType.label)
         ..quantity = food.quantity;
       meals.add(new_meal);
     }
@@ -67,8 +65,7 @@ class VeggieTrackRepository {
       var new_meal = isar.Meal()
         ..date = day.date
         ..mealType = isar.MealType.diner
-        ..foodType.value =
-            await isarVeggieTrack.readFoodTypeByLabel(food.foodType.label)
+        ..foodType.value = await isarVeggieTrack.readFoodTypeByLabel(food.foodType.label)
         ..quantity = food.quantity;
       meals.add(new_meal);
     }
@@ -82,8 +79,7 @@ class VeggieTrackRepository {
   }
 
   Future<void> editDay(models.Day day) async {
-    for (var meal
-        in await isarVeggieTrack.readAllMeals(start: day.date, end: day.date)) {
+    for (var meal in await isarVeggieTrack.readAllMeals(start: day.date, end: day.date)) {
       await isarVeggieTrack.deleteMeal(meal.id);
     }
     for (var meal in await _toIsarMeals(day)) {
@@ -91,26 +87,38 @@ class VeggieTrackRepository {
     }
   }
 
+  Future<void> addFood(DateTime dateTime, models.MealType mealType, models.Food food) async {
+    await isarVeggieTrack.createMeal(isar.Meal()
+      ..date = dateTime
+      ..mealType = isar.MealType.values[mealType.index]
+      ..foodType.value = await isarVeggieTrack.readFoodTypeByLabel(food.foodType.label)
+      ..quantity = food.quantity);
+  }
+
+  Future<void> deleteFood(DateTime dateTime, models.MealType mealType, models.Food food) async {
+    throw UnimplementedError();
+  }
+
+  Future<void> editFood() async {
+    throw UnimplementedError();
+  }
+
   Future<models.Day> getDay(DateTime date) async {
     var meals = await isarVeggieTrack.readAllMeals(start: date, end: date);
-    var lunchMeals =
-        meals.where((meal) => meal.mealType == isar.MealType.lunch);
-    var dinerMeals =
-        meals.where((meal) => meal.mealType == isar.MealType.diner);
+    var lunchMeals = meals.where((meal) => meal.mealType == isar.MealType.lunch);
+    var dinerMeals = meals.where((meal) => meal.mealType == isar.MealType.diner);
     List<models.Food> lunch = [];
     for (var meal in lunchMeals) {
       lunch.add(models.Food(
           foodType: models.FoodType(
-              label: meal.foodType.value!.label,
-              carbonFootprint: meal.foodType.value!.carbonFootprint),
+              label: meal.foodType.value!.label, carbonFootprint: meal.foodType.value!.carbonFootprint),
           quantity: meal.quantity));
     }
     List<models.Food> diner = [];
     for (var meal in dinerMeals) {
       diner.add(models.Food(
           foodType: models.FoodType(
-              label: meal.foodType.value!.label,
-              carbonFootprint: meal.foodType.value!.carbonFootprint),
+              label: meal.foodType.value!.label, carbonFootprint: meal.foodType.value!.carbonFootprint),
           quantity: meal.quantity));
     }
     return models.Day(date: date, lunch: lunch, diner: diner);
@@ -118,7 +126,6 @@ class VeggieTrackRepository {
 
   Future<models.FoodType> getFoodTypeByLabel(String s) async {
     var foodType = await isarVeggieTrack.readFoodTypeByLabel(s);
-    return models.FoodType(
-        label: foodType.label, carbonFootprint: foodType.carbonFootprint);
+    return models.FoodType(label: foodType.label, carbonFootprint: foodType.carbonFootprint);
   }
 }

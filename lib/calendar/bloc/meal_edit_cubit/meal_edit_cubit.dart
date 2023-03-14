@@ -34,4 +34,18 @@ class MealEditCubit extends Cubit<MealEditState> {
     assert(state is MealEditChooseQuantity);
     emit(MealEditInitial());
   }
+
+  void back() async {
+    if (state is MealEditChooseFood) {
+      emit(MealEditInitial());
+    } else if (state is MealEditChooseQuantity) {
+      emit(MealEditChooseFood(
+        dateTime: dateTime,
+        mealType: mealType,
+        mealEditedId: (state as MealEditChooseQuantity).mealEditedId,
+      ));
+    } else {
+      throw Exception('State was not MealEditChooseFood or MealEditChooseQuantity while back was called');
+    }
+  }
 }

@@ -26,11 +26,31 @@ class ChooseFoodCard extends StatelessWidget {
           padding: const EdgeInsets.all(15),
           child: Column(
             children: [
-              Text(
-                title,
-                style: Theme.of(context).textTheme.titleMedium!.copyWith(
+              Row(
+                children: [
+                  IconButton(
+                    onPressed: () {
+                      context.read<MealEditCubit>().back();
+                    },
+                    icon: Icon(
+                      Icons.arrow_back_rounded,
                       color: Theme.of(context).colorScheme.onSurface,
                     ),
+                  ),
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8),
+                      child: Text(
+                        (context.read<MealEditCubit>().state as MealEditChooseFood).mealEditedId == null
+                            ? "Ajouter un aliment"
+                            : "Modifier un aliment",
+                        style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                              color: Theme.of(context).colorScheme.onSurface,
+                            ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
               Expanded(
                 child: Padding(
@@ -44,9 +64,15 @@ class ChooseFoodCard extends StatelessWidget {
                           itemCount: foodTypes.length + 1,
                           itemBuilder: (context, index) {
                             if (index == 0) {
-                              return Text(
-                                "Aliment",
-                                style: Theme.of(context).textTheme.labelMedium,
+                              return Padding(
+                                padding: const EdgeInsets.symmetric(vertical: 4),
+                                child: Text(
+                                  "Aliment",
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .labelMedium
+                                      ?.copyWith(color: Theme.of(context).colorScheme.onSurface),
+                                ),
                               );
                             } else {
                               index = index - 1;
@@ -58,7 +84,6 @@ class ChooseFoodCard extends StatelessWidget {
                                     borderRadius: BorderRadius.circular(7),
                                   ),
                                   onTap: () {
-                                    var date = context.read<MonthDaysBloc>().state.date;
                                     context.read<MealEditCubit>().foodChosen(
                                           foodTypes[index],
                                         );
@@ -70,7 +95,7 @@ class ChooseFoodCard extends StatelessWidget {
                                         ),
                                   ),
                                   trailing: Text(
-                                    foodTypes[index].carbonFootprint.toString() + ' kgCO2eq/kg',
+                                    '${foodTypes[index].carbonFootprint} kgCO2eq/kg',
                                     style: Theme.of(context).textTheme.labelMedium!.copyWith(
                                           color: Theme.of(context)
                                               .extension<CustomColors>()!

@@ -26,18 +26,39 @@ class ChooseQuantityCard extends StatelessWidget {
           padding: const EdgeInsets.all(15),
           child: Column(
             children: [
-              Text(
-                title,
-                style: Theme.of(context).textTheme.titleMedium!.copyWith(
+              Row(
+                children: [
+                  IconButton(
+                    onPressed: () {
+                      context.read<MealEditCubit>().back();
+                    },
+                    icon: Icon(
+                      Icons.arrow_back_rounded,
                       color: Theme.of(context).colorScheme.onSurface,
                     ),
+                  ),
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8),
+                      child: Text(
+                        (context.read<MealEditCubit>().state as MealEditChooseQuantity).mealEditedId == null
+                            ? "Ajouter un aliment"
+                            : "Modifier un aliment",
+                        style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                              color: Theme.of(context).colorScheme.onSurface,
+                            ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 10),
                 child: Align(
                   alignment: Alignment.centerLeft,
                   child: Text(
-                    "Quantité",
+                    "Quantité de"
+                    " ${(context.read<MealEditCubit>().state as MealEditChooseQuantity).foodType.label}",
                     style: Theme.of(context).textTheme.labelMedium!.copyWith(
                           color: Theme.of(context).colorScheme.onSurface,
                         ),
