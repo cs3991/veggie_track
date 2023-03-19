@@ -41,7 +41,6 @@ class MealCard extends StatelessWidget {
                       var day = (state is MonthDaysLoaded) ? state.days[state.date.day - 1] : null;
                       var mealOrNull = mealType == MealType.lunch ? day?.lunch : day?.diner;
                       var itemCount = mealOrNull?.length == null ? 1 : mealOrNull!.length + 1;
-                      var date = state.date;
                       return ListView.builder(
                         itemCount: itemCount,
                         itemBuilder: (context, index) {

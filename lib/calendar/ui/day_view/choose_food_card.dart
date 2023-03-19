@@ -7,13 +7,9 @@ import '../../bloc/meal_edit_cubit/meal_edit_cubit.dart';
 import '../../bloc/month_days_bloc/month_days_bloc.dart';
 
 class ChooseFoodCard extends StatelessWidget {
-  final String title;
-  final MealType mealType;
 
-  ChooseFoodCard({
+  const ChooseFoodCard({
     Key? key,
-    required this.title,
-    required this.mealType,
   }) : super(key: key);
 
   @override

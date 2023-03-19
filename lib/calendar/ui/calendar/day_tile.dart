@@ -63,7 +63,7 @@ class DayTile extends StatelessWidget {
                             ),
                           )
                         : BoxDecoration(
-                            color: Color.fromARGB(60, 255, 255, 255),
+                            color: const Color.fromARGB(60, 255, 255, 255),
                             borderRadius: BorderRadius.circular(10),
                           )),
               ),

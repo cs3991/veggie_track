@@ -78,7 +78,6 @@ class MonthDaysBloc extends Cubit<MonthDaysState> {
     FoodType foodType,
     int quantity,
   ) async {
-    print('editFood called');
     if (state is MonthDaysLoaded) {
       final MonthDaysLoaded state = this.state as MonthDaysLoaded;
       if (mealType == MealType.lunch) {

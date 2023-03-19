@@ -1,20 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:veggie_track_repository/veggie_track_repository.dart';
 
 import '../../bloc/meal_edit_cubit/meal_edit_cubit.dart';
 import '../../bloc/month_days_bloc/month_days_bloc.dart';
 
 class ChooseQuantityCard extends StatelessWidget {
-  final String title;
-  final MealType mealType;
   int quantity = 25;
 
-  ChooseQuantityCard({
-    Key? key,
-    required this.title,
-    required this.mealType,
-  }) : super(key: key);
+  ChooseQuantityCard({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -80,7 +73,7 @@ class ChooseQuantityCard extends StatelessWidget {
                     children: List.generate(
                       20,
                       (index) => Text(
-                        ((index + 1) * 25).toString() + " g",
+                        "${(index + 1) * 25} g",
                         style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                               color: Theme.of(context).colorScheme.onSurface,
                             ),
@@ -95,18 +88,20 @@ class ChooseQuantityCard extends StatelessWidget {
                   foregroundColor: Theme.of(context).colorScheme.onSecondary,
                 ),
                 onPressed: () {
-                  var date = context.read<MonthDaysBloc>().state.date;
-                  var foodType = (context.read<MealEditCubit>().state as MealEditChooseQuantity).foodType;
-                  var mealEditedId =
-                      (context.read<MealEditCubit>().state as MealEditChooseQuantity).mealEditedId;
+                  var state = context.read<MealEditCubit>().state as MealEditChooseQuantity;
+                  var date = state.dateTime;
+                  var foodType = state.foodType;
+                  var mealEditedId = state.mealEditedId;
                   if (mealEditedId != null) {
-                    context.read<MonthDaysBloc>().editFood(date, mealType, mealEditedId, foodType, quantity);
+                    context
+                        .read<MonthDaysBloc>()
+                        .editFood(date, state.mealType, mealEditedId, foodType, quantity);
                   } else {
-                    context.read<MonthDaysBloc>().addFood(date, mealType, foodType, quantity);
+                    context.read<MonthDaysBloc>().addFood(date, state.mealType, foodType, quantity);
                   }
                   context.read<MealEditCubit>().quantityChosen(quantity);
                 },
-                child: Text("Valider"),
+                child: const Text("Valider"),
               ),
             ],
           ),

@@ -54,20 +54,20 @@ class VeggieTrackRepository {
   Future<List<isar.Meal>> _toIsarMeals(models.Day day) async {
     List<isar.Meal> meals = [];
     for (var food in day.lunch) {
-      var new_meal = isar.Meal()
+      var newMeal = isar.Meal()
         ..date = day.date
         ..mealType = isar.MealType.lunch
         ..foodType.value = await isarVeggieTrack.readFoodTypeByLabel(food.foodType.label)
         ..quantity = food.quantity;
-      meals.add(new_meal);
+      meals.add(newMeal);
     }
     for (var food in day.diner) {
-      var new_meal = isar.Meal()
+      var newMeal = isar.Meal()
         ..date = day.date
         ..mealType = isar.MealType.diner
         ..foodType.value = await isarVeggieTrack.readFoodTypeByLabel(food.foodType.label)
         ..quantity = food.quantity;
-      meals.add(new_meal);
+      meals.add(newMeal);
     }
     return meals;
   }

@@ -45,16 +45,10 @@ class _DayBodyState extends State<DayBody> {
                       );
                     }
                     if (state is MealEditChooseFood) {
-                      return ChooseFoodCard(
-                        title: 'Déjeuner',
-                        mealType: MealType.lunch,
-                      );
+                      return const ChooseFoodCard();
                     }
                     if (state is MealEditChooseQuantity) {
-                      return ChooseQuantityCard(
-                        title: 'Déjeuner',
-                        mealType: MealType.lunch,
-                      );
+                      return ChooseQuantityCard();
                     } else {
                       throw Exception('Unknown state');
                     }
@@ -87,16 +81,10 @@ class _DayBodyState extends State<DayBody> {
                       );
                     }
                     if (state is MealEditChooseFood) {
-                      return ChooseFoodCard(
-                        title: 'Dîner',
-                        mealType: MealType.diner,
-                      );
+                      return const ChooseFoodCard();
                     }
                     if (state is MealEditChooseQuantity) {
-                      return ChooseQuantityCard(
-                        title: 'Dîner',
-                        mealType: MealType.diner,
-                      );
+                      return ChooseQuantityCard();
                     } else {
                       throw Exception('Unknown state');
                     }

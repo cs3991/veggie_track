@@ -88,10 +88,8 @@ void main() {
       ], diner: [
         Food(foodType: await repo.getFoodTypeByLabel('banana'), quantity: 200),
       ]));
-      var apple_id =
-          (await repo.isarVeggieTrack.readFoodTypeByLabel('apple')).id;
-      expect(repo.isarVeggieTrack.deleteFoodType(apple_id),
-          throwsA(isA<Exception>()));
+      var appleId = (await repo.isarVeggieTrack.readFoodTypeByLabel('apple')).id;
+      expect(repo.isarVeggieTrack.deleteFoodType(appleId), throwsA(isA<Exception>()));
     });
   });
 }
