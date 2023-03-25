@@ -26,13 +26,9 @@ class IsarVeggieTrack {
   }
 
   Future<void> createFoodType(FoodType foodType) async {
-    if ((await isar.foodTypes
-            .filter()
-            .labelEqualTo(foodType.label)
-            .findFirst()) !=
+    if ((await isar.foodTypes.filter().distantIdEqualTo(foodType.distantId).findFirst()) !=
         null) {
-      throw IsarException(
-          "FoodType with label ${foodType.label} already exists");
+      throw IsarException("FoodType with distantId ${foodType.distantId} already exists");
     }
     await isar.writeTxn(() async {
       await isar.foodTypes.put(foodType);

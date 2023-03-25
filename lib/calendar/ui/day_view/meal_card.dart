@@ -24,7 +24,12 @@ class MealCard extends StatelessWidget {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
       child: Center(
         child: Padding(
-          padding: const EdgeInsets.all(15),
+          padding: const EdgeInsets.only(
+            top: 15,
+            left: 15,
+            right: 15,
+            bottom: 7,
+          ),
           child: Column(
             children: [
               Text(
@@ -35,91 +40,94 @@ class MealCard extends StatelessWidget {
               ),
               Expanded(
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 10),
+                  padding: const EdgeInsets.only(top: 10),
                   child: BlocBuilder<MonthDaysBloc, MonthDaysState>(
                     builder: (context, state) {
                       var day = (state is MonthDaysLoaded) ? state.days[state.date.day - 1] : null;
                       var mealOrNull = mealType == MealType.lunch ? day?.lunch : day?.diner;
                       var itemCount = mealOrNull?.length == null ? 1 : mealOrNull!.length + 1;
-                      return ListView.builder(
-                        itemCount: itemCount,
-                        itemBuilder: (context, index) {
-                          if (index == itemCount - 1) {
-                            return Padding(
-                              padding: const EdgeInsets.symmetric(vertical: 4),
-                              child: ElevatedButton(
-                                style: ElevatedButton.styleFrom(
-                                  shape: const CircleBorder(),
-                                  padding: const EdgeInsets.all(20),
-                                  backgroundColor: Theme.of(context).colorScheme.secondary,
-                                ),
-                                onPressed: () {
-                                  context.read<MealEditCubit>().addFood();
-                                },
-                                child: Icon(
-                                  Icons.add,
-                                  color: Theme.of(context).colorScheme.onSecondary,
-                                ),
-                              ),
-                            );
-                          } else {
-                            var meal = mealOrNull!; // If we build an item, then meal is not null.
-                            var food = meal[index];
-                            var carbonEmissions = (food.foodType.carbonFootprint * food.quantity).toInt();
-                            return Padding(
-                              padding: const EdgeInsets.symmetric(vertical: 4),
-                              child: ContextMenuRegion(
-                                contextMenuBuilder: (context, offset) {
-                                  return AdaptiveTextSelectionToolbar.buttonItems(
-                                    anchors: TextSelectionToolbarAnchors(
-                                      primaryAnchor: offset,
-                                    ),
-                                    buttonItems: <ContextMenuButtonItem>[
-                                      ContextMenuButtonItem(
-                                        label: 'Supprimer',
-                                        onPressed: () {
-                                          ContextMenuController.removeAny();
-                                          context
-                                              .read<MonthDaysBloc>()
-                                              .deleteFood(state.date, mealType, index);
-                                        },
-                                      ),
-                                    ],
-                                  );
-                                },
-                                child: ListTile(
-                                  tileColor: Theme.of(context).colorScheme.primaryContainer,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(7),
+                      return Material(
+                        color: Colors.transparent,
+                        child: ListView.builder(
+                          itemCount: itemCount,
+                          itemBuilder: (context, index) {
+                            if (index == itemCount - 1) {
+                              return Padding(
+                                padding: const EdgeInsets.symmetric(vertical: 4),
+                                child: ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    shape: const CircleBorder(),
+                                    padding: const EdgeInsets.all(20),
+                                    backgroundColor: Theme.of(context).colorScheme.secondary,
                                   ),
-                                  onTap: () {
-                                    context.read<MealEditCubit>().addFood(mealEditedId: index);
+                                  onPressed: () {
+                                    context.read<MealEditCubit>().addFood();
                                   },
-                                  title: Text(
-                                    food.foodType.label,
-                                    style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                                          color: Theme.of(context).colorScheme.onPrimaryContainer,
-                                        ),
-                                  ),
-                                  subtitle: Text(
-                                    '${food.quantity.toString()} g',
-                                    style: Theme.of(context).textTheme.labelSmall!.copyWith(
-                                          color: Theme.of(context).colorScheme.onPrimaryContainer,
-                                        ),
-                                  ),
-                                  trailing: Text(
-                                    '$carbonEmissions gCO2eq',
-                                    style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                                          color: Theme.of(context)
-                                              .extension<CustomColors>()!
-                                              .getEmissionColor(carbonEmissions.toDouble()),
-                                        ),
+                                  child: Icon(
+                                    Icons.add,
+                                    color: Theme.of(context).colorScheme.onSecondary,
                                   ),
                                 ),
-                              ),
-                            );
-                          }
-                        },
+                              );
+                            } else {
+                              var meal = mealOrNull!; // If we build an item, then meal is not null.
+                              var food = meal[index];
+                              var carbonEmissions = (food.foodType.carbonFootprint * food.quantity).toInt();
+                              return Padding(
+                                padding: const EdgeInsets.symmetric(vertical: 4),
+                                child: ContextMenuRegion(
+                                  contextMenuBuilder: (context, offset) {
+                                    return AdaptiveTextSelectionToolbar.buttonItems(
+                                      anchors: TextSelectionToolbarAnchors(
+                                        primaryAnchor: offset,
+                                      ),
+                                      buttonItems: <ContextMenuButtonItem>[
+                                        ContextMenuButtonItem(
+                                          label: 'Supprimer',
+                                          onPressed: () {
+                                            ContextMenuController.removeAny();
+                                            context
+                                                .read<MonthDaysBloc>()
+                                                .deleteFood(state.date, mealType, index);
+                                          },
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                  child: ListTile(
+                                    tileColor: Theme.of(context).colorScheme.primaryContainer,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(7),
+                                    ),
+                                    onTap: () {
+                                      context.read<MealEditCubit>().addFood(mealEditedId: index);
+                                    },
+                                    title: Text(
+                                      food.foodType.displayNameFr,
+                                      style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                                            color: Theme.of(context).colorScheme.onPrimaryContainer,
+                                          ),
+                                    ),
+                                    subtitle: Text(
+                                      '${food.quantity.toString()} g',
+                                      style: Theme.of(context).textTheme.labelSmall!.copyWith(
+                                            color: Theme.of(context).colorScheme.onPrimaryContainer,
+                                          ),
+                                    ),
+                                    trailing: Text(
+                                      '$carbonEmissions gCO2eq',
+                                      style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                                            color: Theme.of(context)
+                                                .extension<CustomColors>()!
+                                                .getEmissionColor(carbonEmissions.toDouble()),
+                                          ),
+                                    ),
+                                  ),
+                                ),
+                              );
+                            }
+                          },
+                        ),
                       );
                     },
                   ),

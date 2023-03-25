@@ -51,7 +51,7 @@ class ChooseQuantityCard extends StatelessWidget {
                   alignment: Alignment.centerLeft,
                   child: Text(
                     "Quantité de"
-                    " ${(context.read<MealEditCubit>().state as MealEditChooseQuantity).foodType.label}",
+                    " ${(context.read<MealEditCubit>().state as MealEditChooseQuantity).foodType.displayNameFr}",
                     style: Theme.of(context).textTheme.labelMedium!.copyWith(
                           color: Theme.of(context).colorScheme.onSurface,
                         ),

@@ -115,7 +115,7 @@ class MonthDaysBloc extends Cubit<MonthDaysState> {
     final DateTime lastDay = DateTime(day.year, day.month + 1, day.day);
     while (day.isBefore(lastDay)) {
       days.add(day);
-      day = day.add(const Duration(days: 1));
+      day = day.copyWith(day: day.day + 1);
     }
     return days;
   }

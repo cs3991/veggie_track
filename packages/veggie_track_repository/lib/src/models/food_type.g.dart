@@ -9,9 +9,14 @@ part of 'food_type.dart';
 FoodType _$FoodTypeFromJson(Map<String, dynamic> json) => FoodType(
       label: json['label'] as String,
       carbonFootprint: (json['carbon_footprint'] as num).toDouble(),
+      displayNameFr: json['display_name_fr'] as String,
+      displayNameEn: json['display_name_en'] as String,
     );
 
-Map<String, dynamic> _$FoodTypeToJson(FoodType instance) => <String, dynamic>{
+Map<String, dynamic> _$FoodTypeToJson(FoodType instance) =>
+    <String, dynamic>{
       'label': instance.label,
       'carbon_footprint': instance.carbonFootprint,
+      'display_name_fr': instance.displayNameFr,
+      'display_name_en': instance.displayNameEn,
     };

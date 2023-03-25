@@ -1,13 +1,46 @@
 import 'package:isar_veggie_track/isar_veggie_track.dart' as isar;
 import 'package:veggie_track_repository/src/models/models.dart' as models;
+import 'package:pocketbase_veggie_track/pocketbase_veggie_track.dart' as pocketbase;
 
 class VeggieTrackRepository {
-  final isarVeggieTrack = isar.IsarVeggieTrack();
+  final isarClient = isar.IsarVeggieTrack();
+  final pocketbaseClient = pocketbase.PocketBaseVeggieTrack();
 
   VeggieTrackRepository() {
-    isarVeggieTrack.readAllFoodTypes().then((value) => {
-          if (value.isEmpty) {populateFoodTypes()}
-        });
+    pocketbaseClient.getFoodTypes().then((pbFoodTypes) {
+      isarClient.readAllFoodTypes().then((isarFoodTypes) {
+        for (var pbFoodType in pbFoodTypes) {
+          print("pbFoodType: $pbFoodType");
+          if (isarFoodTypes.where((isarFoodType) => isarFoodType.distantId == pbFoodType.id).isEmpty) {
+            print('does not exist, creating...');
+            isarClient.createFoodType(isar.FoodType()
+              ..label = pbFoodType.label
+              ..carbonFootprint = pbFoodType.carbonFootprint
+              ..displayNameEn = pbFoodType.displayNameEn ?? pbFoodType.label
+              ..displayNameFr = pbFoodType.displayNameFr ?? pbFoodType.label
+              ..distantId = pbFoodType.id);
+          } else {
+            print('exists, updating...');
+            var isarFoodType =
+                isarFoodTypes.firstWhere((isarFoodType) => isarFoodType.distantId == pbFoodType.id);
+            isarClient.updateFoodType(
+                isarFoodType.id,
+                isar.FoodType()
+                  ..label = pbFoodType.label
+                  ..carbonFootprint = pbFoodType.carbonFootprint
+                  ..displayNameEn = pbFoodType.displayNameEn ?? pbFoodType.label
+                  ..displayNameFr = pbFoodType.displayNameFr ?? pbFoodType.label
+                  ..distantId = pbFoodType.id);
+          }
+        }
+        for (var isarFoodType in isarFoodTypes) {
+          if (pbFoodTypes.where((pbFoodType) => pbFoodType.id == isarFoodType.distantId).isEmpty) {
+            isarClient.deleteFoodType(isarFoodType.id);
+          }
+        }
+      });
+    });
+
     // addDay(models.Day(date: DateTime(2023, 03, 4), lunch: [], diner: []));
     // addDay(models.Day(date: DateTime(2023, 03, 5), lunch: [
     //   models.Food(
@@ -24,29 +57,20 @@ class VeggieTrackRepository {
   }
 
   Future<void> addFoodType(models.FoodType repoFoodType) async {
-    await isarVeggieTrack.createFoodType(isar.FoodType()
+    await isarClient.createFoodType(isar.FoodType()
       ..label = repoFoodType.label
       ..carbonFootprint = repoFoodType.carbonFootprint);
   }
 
-  Future<void> populateFoodTypes() async {
-    addFoodType(models.FoodType(label: "beef", carbonFootprint: 99.48));
-    addFoodType(models.FoodType(label: "beef_dairy", carbonFootprint: 33.3));
-    addFoodType(models.FoodType(label: "vegetable", carbonFootprint: 0.53));
-    addFoodType(models.FoodType(label: "fruit", carbonFootprint: 1.1));
-    addFoodType(models.FoodType(label: "pork", carbonFootprint: 12.31));
-    addFoodType(models.FoodType(label: "carbs", carbonFootprint: 4));
-    addFoodType(models.FoodType(label: "fish", carbonFootprint: 14.63));
-    addFoodType(models.FoodType(label: "poultry", carbonFootprint: 9.87));
-    addFoodType(models.FoodType(label: "cheese", carbonFootprint: 23.88));
-    addFoodType(models.FoodType(label: "eggs", carbonFootprint: 4.67));
-  }
-
   Future<List<models.FoodType>> getAllFoodTypes() async {
-    var isarFoodTypes = await isarVeggieTrack.readAllFoodTypes();
+    var isarFoodTypes = await isarClient.readAllFoodTypes();
     var repoFoodTypes = isarFoodTypes
-        .map<models.FoodType>((isarFoodType) =>
-            models.FoodType(label: isarFoodType.label, carbonFootprint: isarFoodType.carbonFootprint))
+        .map<models.FoodType>((isarFoodType) => models.FoodType(
+              label: isarFoodType.label,
+              carbonFootprint: isarFoodType.carbonFootprint,
+              displayNameEn: isarFoodType.displayNameEn,
+              displayNameFr: isarFoodType.displayNameFr,
+            ))
         .toList();
     return repoFoodTypes;
   }
@@ -57,7 +81,7 @@ class VeggieTrackRepository {
       var newMeal = isar.Meal()
         ..date = day.date
         ..mealType = isar.MealType.lunch
-        ..foodType.value = await isarVeggieTrack.readFoodTypeByLabel(food.foodType.label)
+        ..foodType.value = await isarClient.readFoodTypeByLabel(food.foodType.label)
         ..quantity = food.quantity;
       meals.add(newMeal);
     }
@@ -65,7 +89,7 @@ class VeggieTrackRepository {
       var newMeal = isar.Meal()
         ..date = day.date
         ..mealType = isar.MealType.diner
-        ..foodType.value = await isarVeggieTrack.readFoodTypeByLabel(food.foodType.label)
+        ..foodType.value = await isarClient.readFoodTypeByLabel(food.foodType.label)
         ..quantity = food.quantity;
       meals.add(newMeal);
     }
@@ -74,24 +98,24 @@ class VeggieTrackRepository {
 
   Future<void> addDay(models.Day day) async {
     for (var meal in await _toIsarMeals(day)) {
-      await isarVeggieTrack.createMeal(meal);
+      await isarClient.createMeal(meal);
     }
   }
 
   Future<void> editDay(models.Day day) async {
-    for (var meal in await isarVeggieTrack.readAllMeals(start: day.date, end: day.date)) {
-      await isarVeggieTrack.deleteMeal(meal.id);
+    for (var meal in await isarClient.readAllMeals(start: day.date, end: day.date)) {
+      await isarClient.deleteMeal(meal.id);
     }
     for (var meal in await _toIsarMeals(day)) {
-      await isarVeggieTrack.createMeal(meal);
+      await isarClient.createMeal(meal);
     }
   }
 
   Future<void> addFood(DateTime dateTime, models.MealType mealType, models.Food food) async {
-    await isarVeggieTrack.createMeal(isar.Meal()
+    await isarClient.createMeal(isar.Meal()
       ..date = dateTime
       ..mealType = isar.MealType.values[mealType.index]
-      ..foodType.value = await isarVeggieTrack.readFoodTypeByLabel(food.foodType.label)
+      ..foodType.value = await isarClient.readFoodTypeByLabel(food.foodType.label)
       ..quantity = food.quantity);
   }
 
@@ -104,28 +128,42 @@ class VeggieTrackRepository {
   }
 
   Future<models.Day> getDay(DateTime date) async {
-    var meals = await isarVeggieTrack.readAllMeals(start: date, end: date);
+    var endDate = date.copyWith(day: date.day + 1).subtract(const Duration(seconds: 1));
+    var meals = await isarClient.readAllMeals(start: date, end: endDate);
     var lunchMeals = meals.where((meal) => meal.mealType == isar.MealType.lunch);
     var dinerMeals = meals.where((meal) => meal.mealType == isar.MealType.diner);
     List<models.Food> lunch = [];
     for (var meal in lunchMeals) {
       lunch.add(models.Food(
           foodType: models.FoodType(
-              label: meal.foodType.value!.label, carbonFootprint: meal.foodType.value!.carbonFootprint),
+            label: meal.foodType.value!.label,
+            carbonFootprint: meal.foodType.value!.carbonFootprint,
+            displayNameEn: meal.foodType.value!.displayNameEn,
+            displayNameFr: meal.foodType.value!.displayNameFr,
+          ),
           quantity: meal.quantity));
     }
     List<models.Food> diner = [];
     for (var meal in dinerMeals) {
       diner.add(models.Food(
           foodType: models.FoodType(
-              label: meal.foodType.value!.label, carbonFootprint: meal.foodType.value!.carbonFootprint),
+            label: meal.foodType.value!.label,
+            carbonFootprint: meal.foodType.value!.carbonFootprint,
+            displayNameEn: meal.foodType.value!.displayNameEn,
+            displayNameFr: meal.foodType.value!.displayNameFr,
+          ),
           quantity: meal.quantity));
     }
     return models.Day(date: date, lunch: lunch, diner: diner);
   }
 
   Future<models.FoodType> getFoodTypeByLabel(String s) async {
-    var foodType = await isarVeggieTrack.readFoodTypeByLabel(s);
-    return models.FoodType(label: foodType.label, carbonFootprint: foodType.carbonFootprint);
+    var foodType = await isarClient.readFoodTypeByLabel(s);
+    return models.FoodType(
+      label: foodType.label,
+      carbonFootprint: foodType.carbonFootprint,
+      displayNameEn: foodType.displayNameEn,
+      displayNameFr: foodType.displayNameFr,
+    );
   }
 }

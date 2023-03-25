@@ -9,6 +9,7 @@ class FoodType {
   late double carbonFootprint;
   late String displayNameFr;
   late String displayNameEn;
+  late String distantId;
 
   @override
   String toString() {

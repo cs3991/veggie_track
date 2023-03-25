@@ -12,6 +12,8 @@ dependencies:
   json_annotation: ^4.7.0
   isar_veggie_track:
     path: ../isar_veggie_track
+  pocketbase_veggie_track:
+    path: ../pocketbase_veggie_track
 
 dev_dependencies:
   flutter_test:

@@ -7,7 +7,6 @@ import '../../bloc/meal_edit_cubit/meal_edit_cubit.dart';
 import '../../bloc/month_days_bloc/month_days_bloc.dart';
 
 class ChooseFoodCard extends StatelessWidget {
-
   const ChooseFoodCard({
     Key? key,
   }) : super(key: key);
@@ -19,7 +18,12 @@ class ChooseFoodCard extends StatelessWidget {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
       child: Center(
         child: Padding(
-          padding: const EdgeInsets.all(15),
+          padding: const EdgeInsets.only(
+            top: 15,
+            left: 15,
+            right: 15,
+            bottom: 7,
+          ),
           child: Column(
             children: [
               Row(
@@ -50,58 +54,62 @@ class ChooseFoodCard extends StatelessWidget {
               ),
               Expanded(
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 10),
+                  padding: const EdgeInsets.only(top: 7),
                   child: FutureBuilder(
                     future: context.read<MonthDaysBloc>().veggieTrackRepository.getAllFoodTypes(),
                     builder: (context, snapshot) {
                       if (snapshot.hasData) {
                         var foodTypes = snapshot.data as List<FoodType>;
-                        return ListView.builder(
-                          itemCount: foodTypes.length + 1,
-                          itemBuilder: (context, index) {
-                            if (index == 0) {
-                              return Padding(
-                                padding: const EdgeInsets.symmetric(vertical: 4),
-                                child: Text(
-                                  "Aliment",
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .labelMedium
-                                      ?.copyWith(color: Theme.of(context).colorScheme.onSurface),
-                                ),
-                              );
-                            } else {
-                              index = index - 1;
-                              return Padding(
-                                padding: const EdgeInsets.symmetric(vertical: 4),
-                                child: ListTile(
-                                  tileColor: Theme.of(context).colorScheme.primaryContainer,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(7),
+                        return Material(
+                          color: Colors.transparent,
+                          child: ListView.builder(
+                            itemCount: foodTypes.length + 1,
+                            itemBuilder: (context, index) {
+                              if (index == 0) {
+                                return Padding(
+                                  padding: const EdgeInsets.symmetric(vertical: 4),
+                                  child: Text(
+                                    "Aliment",
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .labelMedium
+                                        ?.copyWith(color: Theme.of(context).colorScheme.onSurface),
                                   ),
-                                  onTap: () {
-                                    context.read<MealEditCubit>().foodChosen(
-                                          foodTypes[index],
-                                        );
-                                  },
-                                  title: Text(
-                                    foodTypes[index].label,
-                                    style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                                          color: Theme.of(context).colorScheme.onPrimaryContainer,
-                                        ),
+                                );
+                              } else {
+                                index = index - 1;
+                                return Padding(
+                                  padding: const EdgeInsets.symmetric(vertical: 4),
+                                  child: ListTile(
+                                    tileColor: Theme.of(context).colorScheme.primaryContainer,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(7),
+                                    ),
+                                    onTap: () {
+                                      context.read<MealEditCubit>().foodChosen(
+                                            foodTypes[index],
+                                          );
+                                    },
+                                    title: Text(
+                                      foodTypes[index].displayNameFr,
+                                      style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                                            color: Theme.of(context).colorScheme.onPrimaryContainer,
+                                          ),
+                                    ),
+                                    trailing: Text(
+                                      // round foodTypes[index].carbonFootprint to 1 decimal point and format with french comma
+                                      '${foodTypes[index].carbonFootprint.toStringAsFixed(1).replaceAll('.', ',')} kgCO2eq/kg',
+                                      style: Theme.of(context).textTheme.labelMedium!.copyWith(
+                                            color: Theme.of(context)
+                                                .extension<CustomColors>()!
+                                                .getEmissionColor(foodTypes[index].carbonFootprint * 200),
+                                          ),
+                                    ),
                                   ),
-                                  trailing: Text(
-                                    '${foodTypes[index].carbonFootprint} kgCO2eq/kg',
-                                    style: Theme.of(context).textTheme.labelMedium!.copyWith(
-                                          color: Theme.of(context)
-                                              .extension<CustomColors>()!
-                                              .getEmissionColor(foodTypes[index].carbonFootprint * 200),
-                                        ),
-                                  ),
-                                ),
-                              );
-                            }
-                          },
+                                );
+                              }
+                            },
+                          ),
                         );
                       } else {
                         return const Center(
