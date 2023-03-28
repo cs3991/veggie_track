@@ -64,7 +64,7 @@ class MonthDaysBloc extends Cubit<MonthDaysState> {
   Future<void> addFood(DateTime dateTime, MealType mealType, FoodType foodType, int quantity) async {
     if (state is MonthDaysLoaded) {
       final MonthDaysLoaded state = this.state as MonthDaysLoaded;
-      veggieTrackRepository.addFood(dateTime, mealType, Food(foodType: foodType, quantity: quantity));
+      await veggieTrackRepository.addFood(dateTime, mealType, Food(foodType: foodType, quantity: quantity));
       await updateMonth(state.date);
     } else {
       throw Exception('State was not MonthDaysLoaded while addFood was called');

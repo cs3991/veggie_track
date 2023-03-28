@@ -1,6 +1,6 @@
 import 'package:isar_veggie_track/isar_veggie_track.dart' as isar;
-import 'package:veggie_track_repository/src/models/models.dart' as models;
 import 'package:pocketbase_veggie_track/pocketbase_veggie_track.dart' as pocketbase;
+import 'package:veggie_track_repository/src/models/models.dart' as models;
 
 class VeggieTrackRepository {
   final isarClient = isar.IsarVeggieTrack();
@@ -10,9 +10,7 @@ class VeggieTrackRepository {
     pocketbaseClient.getFoodTypes().then((pbFoodTypes) {
       isarClient.readAllFoodTypes().then((isarFoodTypes) {
         for (var pbFoodType in pbFoodTypes) {
-          print("pbFoodType: $pbFoodType");
           if (isarFoodTypes.where((isarFoodType) => isarFoodType.distantId == pbFoodType.id).isEmpty) {
-            print('does not exist, creating...');
             isarClient.createFoodType(isar.FoodType()
               ..label = pbFoodType.label
               ..carbonFootprint = pbFoodType.carbonFootprint
@@ -20,7 +18,6 @@ class VeggieTrackRepository {
               ..displayNameFr = pbFoodType.displayNameFr ?? pbFoodType.label
               ..distantId = pbFoodType.id);
           } else {
-            print('exists, updating...');
             var isarFoodType =
                 isarFoodTypes.firstWhere((isarFoodType) => isarFoodType.distantId == pbFoodType.id);
             isarClient.updateFoodType(
@@ -41,19 +38,6 @@ class VeggieTrackRepository {
       });
     });
 
-    // addDay(models.Day(date: DateTime(2023, 03, 4), lunch: [], diner: []));
-    // addDay(models.Day(date: DateTime(2023, 03, 5), lunch: [
-    //   models.Food(
-    //       foodType: models.FoodType(label: 'beef', carbonFootprint: 5155),
-    //       quantity: 200)
-    // ], diner: [
-    //   models.Food(
-    //       foodType: models.FoodType(label: 'vegetable', carbonFootprint: 5155),
-    //       quantity: 300),
-    //   models.Food(
-    //       foodType: models.FoodType(label: 'carbs', carbonFootprint: 5155),
-    //       quantity: 200)
-    // ]));
   }
 
   Future<void> addFoodType(models.FoodType repoFoodType) async {
